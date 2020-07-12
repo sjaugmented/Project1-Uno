@@ -1,7 +1,7 @@
 # Project1-Uno
 SEI-629 Project 1 - HTML, CSS, JS
 <br>
-<img src="Homepage.png">
+<img src="uno-mockup.png">
 <br>
 # Welcome to UNO!
 
@@ -47,7 +47,7 @@ greenReverse = {
 orangeSkip = {
     value: 11,
     point: 20,
-    color: 'orange',
+    color: 'yellow',
     changeTurn: false,
     drawValue: 0
 }
