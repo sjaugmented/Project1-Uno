@@ -93,4 +93,6 @@ Similar to how the computer will keep track of which cards it can play, so will 
 
 These messages and the Game Over screen will be the only on screen prompts in an effort to minimize distractions and allow the flow of the game to take front and center.
 
+(In an effort to protect against unintended clicks, there might be an "Are you sure?" message if the player clicks the Draw Pile while holding playable cards.)
+
 The goal is to create an aesthetically pleasing, minimal-yet-satisfying game loop that is relaxing and entertaining and that - hopefully - users will want to play again and again.
