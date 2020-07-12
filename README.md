@@ -36,7 +36,7 @@ red8 = { <br>
     drawValue: 0<br>
 }
 
-Action Cards will be assigned a value for the sake of logic comparisons, in ascending order of danger to the CPU in the event they lose:
+Action Cards will be assigned a value for the sake of logic comparisons, in ascending order of danger to the CPU in the event it loses:
 
 greenReverse = {<br>
     value: 10,<br>
