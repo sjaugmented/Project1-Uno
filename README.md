@@ -29,61 +29,62 @@ The first player to reach 200 loses the game.
 Number Cards are straight forward:
 
 red8 = { <br>
-    value: 8,
-    point: 8,
-    color: 'red',
-    changeTurn: true,
-    drawValue: 0
+    value: 8,<br>
+    point: 8,<br>
+    color: 'red',<br>
+    changeTurn: true,<br>
+    drawValue: 0<br>
 }
 
 Action Cards will be assigned a value for the sake of logic comparisons, in ascending order of danger to the CPU in the event they lose:
 
-greenReverse = {
-    value: 10,
-    point: 20,
-    color: 'green',
-    changeTurn: false,
-    drawValue: 0
+greenReverse = {<br>
+    value: 10,<br>
+    point: 20,<br>
+    color: 'green',<br>
+    changeTurn: false,<br>
+    drawValue: 0<br>
 }
 
-orangeSkip = {
-    value: 11,
-    point: 20,
-    color: 'yellow',
-    changeTurn: false,
-    drawValue: 0
+orangeSkip = {<br>
+    value: 11,<br>
+    point: 20,<br>
+    color: 'yellow',<br>
+    changeTurn: false,<br>
+    drawValue: 0<br>
 }
 
-blueDraw2 = {
-    value: 12,
-    point: 20,
-    color: 'blue',
-    changeTurn: true,
-    drawValue: 2
+blueDraw2 = {<br>
+    value: 12,<br>
+    point: 20,<br>
+    color: 'blue',<br>
+    changeTurn: true,<br>
+    drawValue: 2<br>
 }
 
-wild = {
-    value: 13,
-    point: 50,
-    color: 'any',
-    changeTurn: true,
-    drawValue: 0
+wild = {<br>
+    value: 13,<br>
+    point: 50,<br>
+    color: 'any',<br>
+    changeTurn: true,<br>
+    drawValue: 0<br>
 }
 
-wild4 = {
-    value: 14,
-    point: 50,
-    color: 'any',
-    changeTurn: true,
-    drawValue: 4
+wild4 = {<br>
+    value: 14,<br>
+    point: 50,<br>
+    color: 'any',<br>
+    changeTurn: true,<br>
+    drawValue: 4<br>
 }
 
 The gameController will use the changeTurn and drawValue properties to determine whose turn it is and whether or not any cards need to be drawn.
 
 # CPU LOGIC
-The CPU will have two arrays it keeps track of:
+The CPU will have two arrays it keeps track of two arrays:
 
-cpuHand = []  &  playableCards = []
+cpuHand = []<br>
+playableCards = []
 
 Based on the last card played and it's properties, the CPU will loop through it's cpuHand array, and any card that matches either the value or color of the last card played will be pushed into the playableCards array along with any wilds the CPU may be holding.
 
