@@ -16,7 +16,9 @@ Draw 2 (+2) and Draw 4 (+4) cards will automatically add their amount to the vic
 The immediate goal is to be the first one to have no cards, at which time the opposing player's cards will be totaled and added to their score according to the following rules:
 
 numbered cards 0-9 = face value
+<br>
 Reverse, Skip, +2 = 20pts
+<br>
 Wild, Wild +4 = 50pts
 
 The first player to reach 200 loses the game.
@@ -26,7 +28,7 @@ The first player to reach 200 loses the game.
 
 Number Cards are straight forward:
 
-red8 = {
+red8 = { <br>
     value: 8,
     point: 8,
     color: 'red',
