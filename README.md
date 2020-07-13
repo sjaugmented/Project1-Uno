@@ -99,3 +99,8 @@ These messages and the Game Over screen will be the only on screen prompts in an
 (In an effort to protect against unintended clicks, there might be an "Are you sure?" message if the player clicks the Draw Pile while holding playable cards.)
 
 The goal is to create an aesthetically pleasing, minimal-yet-satisfying game loop that is relaxing and entertaining and that - hopefully - users will want to play again and again.
+
+###Notes from the pitch
+- Layer the hands as you draw cards
+
+- how to create the cards? classes and constructors or by hand?

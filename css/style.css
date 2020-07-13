@@ -1,0 +1,57 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+html {
+  font-size: 62.5%;
+}
+body {
+  box-sizing: border-box;
+  background-color: rgb(29, 104, 160);
+  width: 800px;
+  height: 800px;
+  margin: auto;
+  margin-top: 20px;
+  font: Avenir;
+}
+
+.cpu-hand {
+    margin-bottom: 100px;
+}
+
+.play-area {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.score {
+    display: flex;
+    flex-direction: column;
+    margin: auto 0;
+    color: rgb(6, 37, 62);
+    font-size: x-large;
+}
+
+#cpu-score {
+    color: rgb(140, 4, 4);
+}
+
+#seperator {
+    margin: 10px 0;
+    border: 2px solid rgb(8, 81, 140);
+}
+
+#player-score {
+    color: rgb(0, 140, 0);
+}
+
+.player-hand {
+    margin-top: 100px;
+}
+
+img {
+    width: 100px;
+}
