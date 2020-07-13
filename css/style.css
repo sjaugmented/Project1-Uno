@@ -10,13 +10,17 @@ html {
 }
 body {
   box-sizing: border-box;
-  background-color: rgb(29, 104, 160);
+  //background-color: rgb(38, 94, 136);
   width: 800px;
   height: 800px;
   margin: auto;
   margin-top: 20px;
   font: Avenir;
 }
+
+#grad {
+    background-image: linear-gradient(to bottom right, rgb(46, 118, 172), rgb(15, 66, 87));
+  }
 
 .cpu-hand {
     margin-bottom: 100px;
@@ -36,7 +40,7 @@ body {
 }
 
 #cpu-score {
-    color: rgb(140, 4, 4);
+    color: rgb(121, 2, 2);
 }
 
 #seperator {
