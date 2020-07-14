@@ -10,8 +10,9 @@ const playerScoreDom = document.querySelector('#player-score')
 const playPileDom = document.querySelector('.play-pile')
 const drawPileDom = document.querySelector('.draw-pile')
 
-cpuHand = []
-playerHand = []
+const cpuHand = []
+const playerHand = []
+let topOfPlayPile;
 
 class Card {
     constructor(color, value, points, changeTurn, drawValue, imgSrc) {
@@ -96,10 +97,12 @@ function dealCards() {
         // put cards on the DOM
         const cpuCard = document.createElement('img')
         cpuCard.setAttribute('src', '/images/back.png')
+        cpuCard.setAttribute('class', i)
         cpuHandDom.appendChild(cpuCard)
 
         const playerCard = document.createElement('img')
         playerCard.setAttribute('src', playerHand[i].src)
+        playerCard.setAttribute('class', i)
         playerHandDom.appendChild(playerCard)
     }
 }
@@ -110,8 +113,10 @@ function startPlayPile() {
     for (let i = 0; i < deck.length; i++) {
         if (deck[i].value < 10) {
             playCard.setAttribute('src', deck[i].src)
+            topOfPlayPile = deck.shift()
             break
-        } 
+        }
+        else deck.push(deck.shift())
     }
     playPileDom.appendChild(playCard)
 }
@@ -135,5 +140,28 @@ const newHand = () => {
     startPlayPile()
 }
 
+const startGame = () => {
+    newHand()
 
+    // set event listeners on playerHandDom and drawPileDom
+    playerHandDom.addEventListener('click', (event) => {
+        // use target's class to find card object in array
+        let index = parseInt(event.target.getAttribute('class'))
+        // if value or color matches topOfPlayPile OR color = 'any'
+        if (playerHand[index].value === topOfPlayPile.value || playerHand[index].color === topOfPlayPile.color || playerHand[index].color === 'any') {
+            console.log("You can play that card!")
+            event.target.remove()
+            topOfPlayPile = playerHand.splice(index, 1)
+            playPileDom.setAttribute('src', topOfPlayPile.src)
+        }
+        else {
+            alert("Sorry, you can't play that card...")
+        }
+    })
 
+    drawPileDom.addEventListener('click', () => {
+
+    })
+}
+
+startGame()
