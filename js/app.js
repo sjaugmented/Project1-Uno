@@ -12,7 +12,7 @@ const drawPileDom = document.querySelector('.draw-pile')
 
 const cpuHand = []
 const playerHand = []
-let topOfPlayPile;
+let playPile;
 
 let cpuScore = 0;
 let playerScore = 0;
@@ -82,7 +82,7 @@ const createDeck = () => {
     console.log(deck) // TODO: remove
 }
 
-function shuffleDeck(){
+function shuffleDeck(deck){
   for (let i = deck.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1))
     let temp = deck[i]
@@ -118,12 +118,12 @@ function startPlayPile() {
     for (let i = 0; i < deck.length; i++) {
         if (deck[i].color !== "any" && deck[i].value <= 9) {
             console.log(deck[i]) // TODO: remove
-            topOfPlayPile = deck.splice(i, 1)
+            playPile = deck.splice(i, 1)
             break
         }
     }
     // play card to the playPile
-    playCard.setAttribute('src', topOfPlayPile[0].src)
+    playCard.setAttribute('src', playPile[0].src)
     playPileDom.appendChild(playCard)
 }
 
@@ -139,7 +139,7 @@ const newHand = () => {
     // create new deck
     createDeck()
     // shuffle deck
-    shuffleDeck()
+    shuffleDeck(deck)
     // deal cards and first play card
     dealCards()
     // set down first play card that isn't an action card
@@ -165,6 +165,8 @@ function drawCard(handGetsCard) {
     }
     else {
         // shuffle playPile
+        deck = shuffleDeck(playPile)
+        playPile.length = 0
     }
     
 }
@@ -211,126 +213,110 @@ function checkForWinner() {
 function cpuTurn() {
     if (!playerTurn) {
         // create temp array of playable cards based on last card played
-        // check if playPile is drawCard
-        if (topOfPlayPile[topOfPlayPile.length - 1].drawValue > 0) {
-            for (let i = 0; i < topOfPlayPile[topOfPlayPile.length - 1].value; i++) {
+        const playableCards = []
+        
+        // first check if playPile is drawCard
+        if (playPile[playPile.length - 1].drawValue > 0) {
+            // add however many cards
+            for (let i = 0; i < playPile[playPile.length - 1].value; i++) {
                 drawCard()
             }
         }
-            // add however many cards
         
-        // check if playPile is wild
+        // then check if playPile is wild
+        if (playPile[playPile.length - 1].color === 'any') {
             // all cards playable
-        
-        //
-        
+            playableCard = cpuHand
+        }
 
+        // if not wild, compare cpuHand to top of play pile
+        else {
+            for (const card of cpuHand) {
+                if (card.color === playPile[playPile.length - 1].color || card.value === playPile[playPile.length - 1].value) {
+                    playableCards.push(card)
+                }
+            }
+        }
+        
         // if playableCards exist
+        if (playableCards.length > 0) {
+            let highCardIndex;
+
             // run strategist to determine strategy
-
-        
             // if strategist > 0.5 || playerHand <= 3
-                
+            if (Math.random() > 0.5 && playerHand.length > 3) {
                 // prioritize action/high point cards
+                let highestValue = 0
+
+                for (let i = 0; i < playableCards.length; i++){
+                    if (playableCards[i].value > highestValue) {
+                        highestValue = playableCards[i].value
+                        highCardIndex = i
+                    }
+                }
+            }
+
+            else {
+                // else prioritize color || number cards
+
+            }
+
+            // play card determined by strategist
+            // remove card from cpuHand
+            let chosenCard = playableCards.splice(index, 1)
+
+            // make topOfPlayPile removed card
+            playPile.push(chosenCard[0])
+            // update playPileDom
+            playPileDom.innerHTML = ''
+            const newCard = document.createElement('img')
+            const imgSrc = playPile[0].src
+
+            console.log(imgSrc) // TODO:: remove
+            newCard.setAttribute('src', imgSrc)
+            playPileDom.appendChild(newCard)
+
+            // check cpuHand length and update cpuHandDom
+            if (cpuHand.length > 1) {
+                updateHand(cpuHand, cpuHandDom)
+            }
             
+            // determine uno
+            else if (cpuHand.length === 1) {
+                updateHand(cpuHand, cpuHandDom)
+                alert("CPU declares UNO!")
+            }
         
-            // else prioritize color || number cards
+            // if end of round
+            else {
+                // tally points & update scores
+                tallyPoints(cpuHand)
+                updateScores()
+                alert("You won the round!")
 
-        
-            // choose card from playable array based on strategy
-
-
-            // play card
-                // remove card from cpuHand
+                // next hand if both scores < 200
+                checkForWinner()
+            }
                 
-                // make topOfPlayPile removed card
-        
-                // update playPileDom
-            
-                // update cpuHandDom
-            
-            
-            // check cpuHand
-                // determine uno
-        
-                // determine end of round, aka cpuHand.length == 0
-                    // if end of round
-                        
-                        // tally points
-                        
-                        // update scores
-        
-                        // newHand()
-                    
-                    // else
-                        // determine changeTurn based on played card
-                            
-                            // if changeTurn, playerTurn = true
-                            
-                            // else cpuTurn()
+            // determine changeTurn based on played card
+            if (chosenCard[0].changeTurn) {
+                // if changeTurn, playerTurn = true
+                playerTurn = true
+            }
+            else {
+                // else cpuTurn() again
+                cpuTurn()
+            }   
+        }
         
         // else if no playable cards
+        else {
             // draw card
         
             // update hand
         
-            // playerTurn = true
-        
-
-
-
-
-
-
-
-
-
-        // if value or color matches topOfPlayPile OR color = 'any'
-        for (const card of cpuHand) {
-            if (card.value === topOfPlayPile[0].value || card.color === topOfPlayPile[0].color || card.color === 'any' || topOfPlayPile[0].color === 'any') {
-            
-                // set topOfPlayPile to target.src
-                topOfPlayPile.length = 0
-                let chosenCard = playerHand.splice(index, 1)
-                topOfPlayPile.push(chosenCard[0])
-    
-                // clear the playPile
-                playPileDom.innerHTML = ''
-    
-                // add played card to playPile
-                const newCard = document.createElement('img')
-                const imgSrc = topOfPlayPile[0].src
-                console.log(imgSrc) // TODO:: remove
-                newCard.setAttribute('src', imgSrc)
-                playPileDom.appendChild(newCard)
-    
-                // check playerHand length and update DOM
-                if (playerHand.length > 1) {
-                    updateHand(playerHand, playerHandDom)
-                } else if (playerHand.length === 1) {
-                    updateHand(playerHand, playerHandDom)
-                    alert("You declare UNO!")
-                }
-                else {
-                    // tally points
-                    tallyPoints(cpuHand)
-                    updateScores()
-                    alert("You won the round!")
-    
-                    // next hand if both scores < 200
-                    checkForWinner()
-                }
-    
-                if (chosenCard[0].changeTurn) {
-                    playerTurn = !playerTurn
-    
-                    // cpu's turn
-                    cpuTurn()
-                }
-            }
+            playerTurn = true
         }
-
-        
     }
 }
 
@@ -353,20 +339,20 @@ const startGame = () => {
             let index = parseInt(event.target.getAttribute('id'))
             
             // if value or color matches topOfPlayPile OR color = 'any'
-            if (playerHand[index].value === topOfPlayPile[topOfPlayPile.length - 1].value || playerHand[index].color === topOfPlayPile[topOfPlayPile.length - 1].color || playerHand[index].color === 'any' || topOfPlayPile[topOfPlayPile.length - 1].color === 'any') {
+            if (playerHand[index].value === playPile[playPile.length - 1].value || playerHand[index].color === playPile[playPile.length - 1].color || playerHand[index].color === 'any' || playPile[playPile.length - 1].color === 'any') {
                 console.log("You can play that card!")
             
                 // set topOfPlayPile to target.src
                 //topOfPlayPile.length = 0
                 let chosenCard = playerHand.splice(index, 1)
-                topOfPlayPile.push(chosenCard[0])
+                playPile.push(chosenCard[0])
 
                 // clear the playPile
                 playPileDom.innerHTML = ''
 
                 // add played card to playPile
                 const newCard = document.createElement('img')
-                const imgSrc = topOfPlayPile[topOfPlayPile.length - 1].src
+                const imgSrc = playPile[playPile.length - 1].src
                 console.log(imgSrc) // TODO:: remove
                 newCard.setAttribute('src', imgSrc)
                 playPileDom.appendChild(newCard)
@@ -410,7 +396,7 @@ const startGame = () => {
 
             // check if anything is playable in playerHand
             for (let i = 0; i < playerHand.length; i++) {
-                if (playerHand[i].color === topOfPlayPile[topOfPlayPile.length - 1].color || playerHand[i].value === topOfPlayPile[topOfPlayPile.length - 1].value || playerHand[i].color === 'any' || topOfPlayPile[topOfPlayPile.length - 1].color === 'any') {
+                if (playerHand[i].color === playPile[playPile.length - 1].color || playerHand[i].value === playPile[playPile.length - 1].value || playerHand[i].color === 'any' || playPile[playPile.length - 1].color === 'any') {
                     anythingPlayable = true;
                     break
                 }
