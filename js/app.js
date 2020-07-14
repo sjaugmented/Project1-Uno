@@ -14,11 +14,14 @@ const cpuHand = []
 const playerHand = []
 let topOfPlayPile;
 
+let cpuScore = 0;
+let playerScore = 0;
+
 class Card {
     constructor(color, value, points, changeTurn, drawValue, imgSrc) {
         this.color = color
         this.value = value
-        this.point = points
+        this.points = points
         this.changeTurn = changeTurn
         this.drawValue = drawValue
         this.src = imgSrc
@@ -144,6 +147,7 @@ const newHand = () => {
 }
 
 function updateHand(handToUpdate, domToUpdate) {
+    domToUpdate.innerHTML = ''
     for (let i = 0; i < handToUpdate.length; i++) {
         const updatedCard = document.createElement('img')
         updatedCard.setAttribute('src', handToUpdate[i].src)
@@ -154,8 +158,56 @@ function updateHand(handToUpdate, domToUpdate) {
     }
 }
 
+function drawCard(handGetsCard) {
+    const newCard = deck.shift()
+    handGetsCard.push(newCard)
+}
+
+function tallyPoints(loserHand) {
+    let points = 0
+
+    for (const card of loserHand) {
+        points += card.points
+    }
+
+    if (loserHand == cpuHand) {
+        cpuScore += points
+    }
+    else {
+        playerScore += points
+    }
+}
+
+function updateScores() {
+    // update cpuScoreDom
+    cpuScoreDom.innerHTML = cpuScore
+    if (cpuScore < 100) cpuScoreDom.style.color = 'rgb(0, 140, 0)'
+    else cpuScoreDom.style.color = 'rgb(121, 2, 2)'
+
+    // update playerScoreDom
+    playerScoreDom.innerHTML = playerScore
+    if (playerScore < 100) playerScoreDom.style.color = 'rgb(0, 140, 0)'
+    else playerScoreDom.style.color = 'rgb(121, 2, 2)'
+}
+
+function checkForWinner() {
+    if (playerScore < 200 && cpuScore < 200)
+        newHand()
+    else {
+        // game over
+        if (playerScore > 200)
+            alert('You lost the game.')
+        if (cpuScore > 200)
+            alert('You won the game!')
+    }
+}
+
+
+///////START GAME////////
 const startGame = () => {
     newHand()
+    updateScores()
+
 
     // set event listeners on playerHandDom and drawPileDom
     playerHandDom.addEventListener('click', (event) => {
@@ -181,15 +233,20 @@ const startGame = () => {
             playPileDom.appendChild(newCard)
 
             // check playerHand length and update DOM
-            playerHandDom.innerHTML = ''
             if (playerHand.length > 1) {
                 updateHand(playerHand, playerHandDom)
             } else if (playerHand.length === 1) {
-                alert("You declare UNO!")
                 updateHand(playerHand, playerHandDom)
+                alert("You declare UNO!")
             }
             else {
+                // tally points
+                tallyPoints(cpuHand)
+                updateScores()
                 alert("You won the round!")
+
+                // next hand if both scores < 200
+                checkForWinner()
             }
             
         }
@@ -201,27 +258,42 @@ const startGame = () => {
     let areYouSure = false
 
     drawPileDom.addEventListener('click', () => {
-        let anythingPlayable = false
+        let anythingPlayable;
+
         // check if anything is playable in playerHand
-        for (let card in playerHand) {
-            if (card.color === topOfPlayPile[0].color && card.value === topOfPlayPile[0].value && card.color === 'any' || topOfPlayPile[0].color === 'any') {
+        for (let i = 0; i < playerHand.length; i++) {
+            if (playerHand[i].color === topOfPlayPile[0].color || playerHand[i].value === topOfPlayPile[0].value || playerHand[i].color === 'any' || topOfPlayPile[0].color === 'any') {
                 anythingPlayable = true;
+                break
             }
-            else anythingPlayable = false // TODO: remove - probably don't need thise
+            else anythingPlayable = false // TODO: remove - probably don't need this
+            console.log('anything playable?', anythingPlayable )
         }
 
-        if (anythingPlayable) {
+        if (!anythingPlayable) {
+            // draw card
+            drawCard(playerHand)
+            updateHand(playerHand, playerHandDom)
+        }
+        else {
             if (!areYouSure) {
-                alert("Are you sure?")
+                alert("You sure, bro?")
                 areYouSure = true
             }
             else {
                 // draw card
+                drawCard(playerHand)
+                updateHand(playerHand, playerHandDom)
+                areYouSure = false;
             }
         }
     })
 }
 
 startGame()
+
+
+
+
 
 

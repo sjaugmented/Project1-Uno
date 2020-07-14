@@ -14,7 +14,8 @@ body {
   width: 800px;
   height: 800px;
   margin: auto;
-  margin-top: 20px;
+  margin-top: 50px;
+  margin-bottom: -50px;
   font: Avenir;
 }
 
@@ -42,7 +43,7 @@ body {
 }
 
 #cpu-score {
-    color: rgb(121, 2, 2);
+    /* color: rgb(121, 2, 2); */
 }
 
 #seperator {
@@ -51,7 +52,7 @@ body {
 }
 
 #player-score {
-    color: rgb(0, 140, 0);
+    /* color: rgb(0, 140, 0); */
 }
 
 .player-hand {
