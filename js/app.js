@@ -76,7 +76,7 @@ const createDeck = () => {
         }
     }
 
-    console.log(deck)
+    console.log(deck) // TODO: remove
 }
 
 function shuffleDeck(){
@@ -114,7 +114,7 @@ function startPlayPile() {
     
     for (let i = 0; i < deck.length; i++) {
         if (deck[i].color !== "any" && deck[i].value <= 9) {
-            console.log(deck[i]) // TODO remove
+            console.log(deck[i]) // TODO: remove
             topOfPlayPile = deck.splice(i, 1)
             break
         }
@@ -143,12 +143,23 @@ const newHand = () => {
     startPlayPile()
 }
 
+function updateHand(handToUpdate, domToUpdate) {
+    for (let i = 0; i < handToUpdate.length; i++) {
+        const updatedCard = document.createElement('img')
+        updatedCard.setAttribute('src', handToUpdate[i].src)
+        updatedCard.setAttribute('class', 'player')
+        // update ID's to match playerHand indexes
+        updatedCard.setAttribute('id', i)
+        domToUpdate.appendChild(updatedCard)
+    }
+}
+
 const startGame = () => {
     newHand()
 
     // set event listeners on playerHandDom and drawPileDom
     playerHandDom.addEventListener('click', (event) => {
-        console.log(event.target)
+        console.log(event.target) // TODO: remove
         // use target's class to find card object in array
         let index = parseInt(event.target.getAttribute('id'))
         // if value or color matches topOfPlayPile OR color = 'any'
@@ -165,7 +176,7 @@ const startGame = () => {
             // add played card to playPile
             const newCard = document.createElement('img')
             const imgSrc = topOfPlayPile[0].src
-            console.log(imgSrc)
+            console.log(imgSrc) // TODO:: remove
             newCard.setAttribute('src', imgSrc)
             playPileDom.appendChild(newCard)
 
@@ -181,28 +192,36 @@ const startGame = () => {
                 alert("You won the round!")
             }
             
-
-            
         }
         else {
             alert("Sorry, you can't play that card...")
         }
     })
+    
+    let areYouSure = false
 
     drawPileDom.addEventListener('click', () => {
+        let anythingPlayable = false
+        // check if anything is playable in playerHand
+        for (let card in playerHand) {
+            if (card.color === topOfPlayPile[0].color && card.value === topOfPlayPile[0].value && card.color === 'any' || topOfPlayPile[0].color === 'any') {
+                anythingPlayable = true;
+            }
+            else anythingPlayable = false // TODO: remove - probably don't need thise
+        }
 
+        if (anythingPlayable) {
+            if (!areYouSure) {
+                alert("Are you sure?")
+                areYouSure = true
+            }
+            else {
+                // draw card
+            }
+        }
     })
 }
 
 startGame()
 
-function updateHand(handToUpdate, domToUpdate) {
-    for (let i = 0; i < handToUpdate.length; i++) {
-        const updatedCard = document.createElement('img')
-        updatedCard.setAttribute('src', handToUpdate[i].src)
-        updatedCard.setAttribute('class', 'player')
-        // update ID's to match playerHand indexes
-        updatedCard.setAttribute('id', i)
-        domToUpdate.appendChild(updatedCard)
-    }
-}
+
