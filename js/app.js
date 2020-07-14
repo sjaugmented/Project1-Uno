@@ -212,8 +212,8 @@ function cpuTurn() {
     if (!playerTurn) {
         // create temp array of playable cards based on last card played
         // check if playPile is drawCard
-        if (topOfPlayPile[0].drawValue > 0) {
-            for (let i = 0; i < topOfPlayPile[0].value; i++) {
+        if (topOfPlayPile[topOfPlayPile.length - 1].drawValue > 0) {
+            for (let i = 0; i < topOfPlayPile[topOfPlayPile.length - 1].value; i++) {
                 drawCard()
             }
         }
