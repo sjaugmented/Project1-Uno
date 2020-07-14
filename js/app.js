@@ -41,7 +41,7 @@ function createCard(color) {
         // reverse/skip
         else if (n === 10 || n === 11) {
             deck.push(new Card(color, n, 20, false, 0, 'images/' + color + n + '.png'))
-            deck.push(new Card(color, n, n, true, 0, 'images/' + color + n + '.png'))
+            deck.push(new Card(color, n, n, false, 0, 'images/' + color + n + '.png'))
         }
         // draw 2
         else if (n === 12) {
@@ -159,8 +159,14 @@ function updateHand(handToUpdate, domToUpdate) {
 }
 
 function drawCard(handGetsCard) {
-    const newCard = deck.shift()
-    handGetsCard.push(newCard)
+    if (deck.length > 0) {
+        const newCard = deck.shift()
+        handGetsCard.push(newCard)
+    }
+    else {
+        // shuffle playPile
+    }
+    
 }
 
 function tallyPoints(loserHand) {
@@ -204,7 +210,20 @@ function checkForWinner() {
 
 function cpuTurn() {
     if (!playerTurn) {
-        // create temp array based on playable cards
+        // create temp array of playable cards based on last card played
+        // check if playPile is drawCard
+        if (topOfPlayPile[0].drawValue > 0) {
+            for (let i = 0; i < topOfPlayPile[0].value; i++) {
+                drawCard()
+            }
+        }
+            // add however many cards
+        
+        // check if playPile is wild
+            // all cards playable
+        
+        //
+        
 
         // if playableCards exist
             // run strategist to determine strategy
@@ -240,6 +259,8 @@ function cpuTurn() {
                         // tally points
                         
                         // update scores
+        
+                        // newHand()
                     
                     // else
                         // determine changeTurn based on played card
@@ -313,13 +334,15 @@ function cpuTurn() {
     }
 }
 
+let playerTurn = true
+
 
 ///////START GAME////////
 const startGame = () => {
+    forcePlayerTurn()
     newHand()
     updateScores()
 
-    let playerTurn = true
 
     // set event listeners on playerHandDom and drawPileDom
     playerHandDom.addEventListener('click', (event) => {
@@ -330,11 +353,11 @@ const startGame = () => {
             let index = parseInt(event.target.getAttribute('id'))
             
             // if value or color matches topOfPlayPile OR color = 'any'
-            if (playerHand[index].value === topOfPlayPile[0].value || playerHand[index].color === topOfPlayPile[0].color || playerHand[index].color === 'any' || topOfPlayPile[0].color === 'any') {
+            if (playerHand[index].value === topOfPlayPile[topOfPlayPile.length - 1].value || playerHand[index].color === topOfPlayPile[topOfPlayPile.length - 1].color || playerHand[index].color === 'any' || topOfPlayPile[topOfPlayPile.length - 1].color === 'any') {
                 console.log("You can play that card!")
             
                 // set topOfPlayPile to target.src
-                topOfPlayPile.length = 0
+                //topOfPlayPile.length = 0
                 let chosenCard = playerHand.splice(index, 1)
                 topOfPlayPile.push(chosenCard[0])
 
@@ -343,7 +366,7 @@ const startGame = () => {
 
                 // add played card to playPile
                 const newCard = document.createElement('img')
-                const imgSrc = topOfPlayPile[0].src
+                const imgSrc = topOfPlayPile[topOfPlayPile.length - 1].src
                 console.log(imgSrc) // TODO:: remove
                 newCard.setAttribute('src', imgSrc)
                 playPileDom.appendChild(newCard)
@@ -369,7 +392,7 @@ const startGame = () => {
                     playerTurn = !playerTurn
 
                     // cpu's turn
-                    cpuTurn()
+                    //cpuTurn() // TODO: uncomment!
                 }
             }
             else {
@@ -382,34 +405,50 @@ const startGame = () => {
     let areYouSure = false
 
     drawPileDom.addEventListener('click', () => {
-        let anythingPlayable;
+        if (playerTurn) {
+            let anythingPlayable;
 
-        // check if anything is playable in playerHand
-        for (let i = 0; i < playerHand.length; i++) {
-            if (playerHand[i].color === topOfPlayPile[0].color || playerHand[i].value === topOfPlayPile[0].value || playerHand[i].color === 'any' || topOfPlayPile[0].color === 'any') {
-                anythingPlayable = true;
-                break
+            // check if anything is playable in playerHand
+            for (let i = 0; i < playerHand.length; i++) {
+                if (playerHand[i].color === topOfPlayPile[topOfPlayPile.length - 1].color || playerHand[i].value === topOfPlayPile[topOfPlayPile.length - 1].value || playerHand[i].color === 'any' || topOfPlayPile[topOfPlayPile.length - 1].color === 'any') {
+                    anythingPlayable = true;
+                    break
+                }
+                else anythingPlayable = false // TODO: remove - probably don't need this
+                console.log('anything playable?', anythingPlayable )
             }
-            else anythingPlayable = false // TODO: remove - probably don't need this
-            console.log('anything playable?', anythingPlayable )
-        }
 
-        if (!anythingPlayable) {
-            // draw card
-            drawCard(playerHand)
-            updateHand(playerHand, playerHandDom)
-        }
-        else {
-            if (!areYouSure) {
-                alert("You sure, bro?")
-                areYouSure = true
-            }
-            else {
+            if (!anythingPlayable) {
                 // draw card
                 drawCard(playerHand)
                 updateHand(playerHand, playerHandDom)
-                areYouSure = false;
             }
+            else {
+                if (!areYouSure) {
+                    alert("You sure, bro?")
+                    areYouSure = true
+                }
+                else {
+                    // draw card
+                    drawCard(playerHand)
+                    updateHand(playerHand, playerHandDom)
+                    areYouSure = false;
+                    playerTurn = !playerTurn
+                }
+            }
+        }
+        
+    })
+}
+
+function forcePlayerTurn() {
+    document.addEventListener('keydown', event => {
+        const key = event.key.toLowerCase()
+        console.log(key) //TODO: remove
+
+        if (key === 'p') {
+            playerTurn = true;
+            console.log('playerTurn:', playerTurn)
         }
     })
 }
