@@ -83,12 +83,14 @@ const createDeck = () => {
 }
 
 function shuffleDeck(deck){
-  for (let i = deck.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1))
-    let temp = deck[i]
-    deck[i] = deck[j]
-    deck[j] = temp
-  }
+    console.log('shuffling', deck)  // TODO: remove
+    for (let i = deck.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1))
+        let temp = deck[i]
+        deck[i] = deck[j]
+        deck[j] = temp
+    }
+    console.log(deck, 'shuffled') // TODO: remove
 }
 
 function dealCards() {
@@ -148,10 +150,22 @@ const newHand = () => {
 
 function updateHand(handToUpdate, domToUpdate) {
     domToUpdate.innerHTML = ''
+
     for (let i = 0; i < handToUpdate.length; i++) {
+        let src, cardClass
+
+        if (domToUpdate === cpuHandDom) {
+            src = 'images/back.png'
+            cardClass = 'cpu'
+        } 
+        else {
+            src = handToUpdate[i].src
+            cardClass = 'player'
+        } 
+
         const updatedCard = document.createElement('img')
-        updatedCard.setAttribute('src', handToUpdate[i].src)
-        updatedCard.setAttribute('class', 'player')
+        updatedCard.setAttribute('src', src)
+        updatedCard.setAttribute('class', cardClass)
         // update ID's to match playerHand indexes
         updatedCard.setAttribute('id', i)
         domToUpdate.appendChild(updatedCard)
@@ -162,6 +176,7 @@ function drawCard(handGetsCard) {
     if (deck.length > 0) {
         const newCard = deck.shift()
         handGetsCard.push(newCard)
+        console.log(handGetsCard, 'drew one card') // TODO: remove
     }
     else {
         // shuffle playPile
@@ -214,11 +229,14 @@ function cpuTurn() {
     if (!playerTurn) {
         // create temp array of playable cards based on last card played
         const playableCards = []
+        let chosenCard
+        console.log('cpu beginning turn with the following hand') // TODO: remove
+        console.log(cpuHand) // TODO: remove
         
         // first check if top of playPile is drawCard
         if (playPile[playPile.length - 1].drawValue > 0) {
             // add however many cards
-            for (let i = 0; i < playPile[playPile.length - 1].value; i++) {
+            for (let i = 0; i < playPile[playPile.length - 1].drawValue; i++) {
                 drawCard(cpuHand)
             }
         }
@@ -226,23 +244,46 @@ function cpuTurn() {
         // then check if playPile is wild
         if (playPile[playPile.length - 1].color === 'any') {
             // all cards playable
-            playableCard = cpuHand
+            console.log('last played card is wild') // TODO: remove
+            playableCards = cpuHand
+            
+            console.log('playable cards')
+            console.log(playableCards) // TODO: remove
         }
 
         // if not wild, compare cpuHand to top of play pile
         else {
+            console.log('last card played:') // TODO: remove
+            console.log(playPile[playPile.length - 1])
             for (const card of cpuHand) {
                 if (card.color === playPile[playPile.length - 1].color || card.value === playPile[playPile.length - 1].value) {
                     playableCards.push(card)
                 }
             }
+            console.log('playable cards:')
+            console.log(playableCards) // TODO: remove
         }
-        
-        // if playableCards exist
-        if (playableCards.length > 0) {
+
+        // if no playable cards
+        if (playableCards.length === 0) {
+            console.log('no cards to play') // TODO: remove
+            // draw card
+            drawCard(cpuHand)
+            // update hand
+            updateHand(cpuHand, cpuHandDom)
+            // end turn
+            console.log('cpu ending turn') // TODO: remove
+            playerTurn = true
+        }
+        //if one playable card
+        else if (playableCards.length === 1) {
+            chosenCard = playableCards[0]
+        }
+        // if more than one playable cards
+        else if (playableCards.length > 1) {
+            console.log('cpu has', playableCards.length, 'playable cards')
             let highCardIndex
             let lowCardIndex
-            let chosenCard
 
             // run strategist to determine strategy
             // if strategist > 0.5 || playerHand <= 3
@@ -260,6 +301,8 @@ function cpuTurn() {
                 // play card determined by strategist
                 // remove card from cpuHand
                 chosenCard = playableCards.splice(highCardIndex, 1)
+                console.log('cpu chose high card') // TODO: remove
+                console.log(chosenCard)  // TODO: remove
             }
 
             else {
@@ -276,6 +319,8 @@ function cpuTurn() {
                 // play card determined by strategist
                 // remove card from cpuHand
                 chosenCard = playableCards.splice(lowCardIndex, 1)
+                console.log('cpu chose low card') // TODO: remove
+                console.log(chosenCard)  // TODO: remove
             }
 
             // make topOfPlayPile removed card
@@ -283,9 +328,8 @@ function cpuTurn() {
             // update playPileDom
             playPileDom.innerHTML = ''
             const newCard = document.createElement('img')
-            const imgSrc = playPile[0].src
+            const imgSrc = playPile[playPile.length - 1].src
 
-            console.log(imgSrc) // TODO:: remove
             newCard.setAttribute('src', imgSrc)
             playPileDom.appendChild(newCard)
 
@@ -314,22 +358,15 @@ function cpuTurn() {
             // determine changeTurn based on played card
             if (chosenCard[0].changeTurn) {
                 // if changeTurn, playerTurn = true
+                console.log('cpu has finished its turn') // TODO: remove
                 playerTurn = true
             }
             else {
                 // else cpuTurn() again
+                console.log('cpu goes again') // TODO: remove
                 cpuTurn()
+                
             }   
-        }
-        
-        // else if no playable cards
-        else {
-            // draw card
-            drawCard(cpuHand)
-            // update hand
-            updateHand(cpuHand, cpuHandDom)
-            // end turn
-            playerTurn = true
         }
     }
 }
