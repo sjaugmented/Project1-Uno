@@ -215,11 +215,11 @@ function cpuTurn() {
         // create temp array of playable cards based on last card played
         const playableCards = []
         
-        // first check if playPile is drawCard
+        // first check if top of playPile is drawCard
         if (playPile[playPile.length - 1].drawValue > 0) {
             // add however many cards
             for (let i = 0; i < playPile[playPile.length - 1].value; i++) {
-                drawCard()
+                drawCard(cpuHand)
             }
         }
         
@@ -240,11 +240,13 @@ function cpuTurn() {
         
         // if playableCards exist
         if (playableCards.length > 0) {
-            let highCardIndex;
+            let highCardIndex
+            let lowCardIndex
+            let chosenCard
 
             // run strategist to determine strategy
             // if strategist > 0.5 || playerHand <= 3
-            if (Math.random() > 0.5 && playerHand.length > 3) {
+            if (Math.random() > 0.5 || playerHand.length > 3) {
                 // prioritize action/high point cards
                 let highestValue = 0
 
@@ -254,16 +256,27 @@ function cpuTurn() {
                         highCardIndex = i
                     }
                 }
+
+                // play card determined by strategist
+                // remove card from cpuHand
+                chosenCard = playableCards.splice(highCardIndex, 1)
             }
 
             else {
                 // else prioritize color || number cards
+                let lowestValue = 9
 
+                for (let i = 0; i < playableCards.length; i++){
+                    if (playableCards[i].value < lowestValue) {
+                        lowestValue = playableCards[i].value
+                        lowCardIndex = i
+                    }
+                }
+
+                // play card determined by strategist
+                // remove card from cpuHand
+                chosenCard = playableCards.splice(lowCardIndex, 1)
             }
-
-            // play card determined by strategist
-            // remove card from cpuHand
-            let chosenCard = playableCards.splice(index, 1)
 
             // make topOfPlayPile removed card
             playPile.push(chosenCard[0])
@@ -290,9 +303,9 @@ function cpuTurn() {
             // if end of round
             else {
                 // tally points & update scores
-                tallyPoints(cpuHand)
+                tallyPoints(playerHand)
                 updateScores()
-                alert("You won the round!")
+                alert("CPU won the round!")
 
                 // next hand if both scores < 200
                 checkForWinner()
@@ -312,9 +325,10 @@ function cpuTurn() {
         // else if no playable cards
         else {
             // draw card
-        
+            drawCard(cpuHand)
             // update hand
-        
+            updateHand(cpuHand, cpuHandDom)
+            // end turn
             playerTurn = true
         }
     }
@@ -325,7 +339,7 @@ let playerTurn = true
 
 ///////START GAME////////
 const startGame = () => {
-    forcePlayerTurn()
+    listenForDevMode()
     newHand()
     updateScores()
 
@@ -375,10 +389,10 @@ const startGame = () => {
                 }
 
                 if (chosenCard[0].changeTurn) {
-                    playerTurn = !playerTurn
+                    playerTurn = false
 
                     // cpu's turn
-                    //cpuTurn() // TODO: uncomment!
+                    cpuTurn()
                 }
             }
             else {
@@ -427,14 +441,14 @@ const startGame = () => {
     })
 }
 
-function forcePlayerTurn() {
+function listenForDevMode() {
     document.addEventListener('keydown', event => {
         const key = event.key.toLowerCase()
         console.log(key) //TODO: remove
 
         if (key === 'p') {
             playerTurn = true;
-            console.log('playerTurn:', playerTurn)
+            console.log('forced playerTurn', playerTurn)
         }
     })
 }
