@@ -202,57 +202,181 @@ function checkForWinner() {
     }
 }
 
+function cpuTurn() {
+    if (!playerTurn) {
+        // create temp array based on playable cards
+
+        // if playableCards exist
+            // run strategist to determine strategy
+
+        
+            // if strategist > 0.5 || playerHand <= 3
+                
+                // prioritize action/high point cards
+            
+        
+            // else prioritize color || number cards
+
+        
+            // choose card from playable array based on strategy
+
+
+            // play card
+                // remove card from cpuHand
+                
+                // make topOfPlayPile removed card
+        
+                // update playPileDom
+            
+                // update cpuHandDom
+            
+            
+            // check cpuHand
+                // determine uno
+        
+                // determine end of round, aka cpuHand.length == 0
+                    // if end of round
+                        
+                        // tally points
+                        
+                        // update scores
+                    
+                    // else
+                        // determine changeTurn based on played card
+                            
+                            // if changeTurn, playerTurn = true
+                            
+                            // else cpuTurn()
+        
+        // else if no playable cards
+            // draw card
+        
+            // update hand
+        
+            // playerTurn = true
+        
+
+
+
+
+
+
+
+
+
+        // if value or color matches topOfPlayPile OR color = 'any'
+        for (const card of cpuHand) {
+            if (card.value === topOfPlayPile[0].value || card.color === topOfPlayPile[0].color || card.color === 'any' || topOfPlayPile[0].color === 'any') {
+            
+                // set topOfPlayPile to target.src
+                topOfPlayPile.length = 0
+                let chosenCard = playerHand.splice(index, 1)
+                topOfPlayPile.push(chosenCard[0])
+    
+                // clear the playPile
+                playPileDom.innerHTML = ''
+    
+                // add played card to playPile
+                const newCard = document.createElement('img')
+                const imgSrc = topOfPlayPile[0].src
+                console.log(imgSrc) // TODO:: remove
+                newCard.setAttribute('src', imgSrc)
+                playPileDom.appendChild(newCard)
+    
+                // check playerHand length and update DOM
+                if (playerHand.length > 1) {
+                    updateHand(playerHand, playerHandDom)
+                } else if (playerHand.length === 1) {
+                    updateHand(playerHand, playerHandDom)
+                    alert("You declare UNO!")
+                }
+                else {
+                    // tally points
+                    tallyPoints(cpuHand)
+                    updateScores()
+                    alert("You won the round!")
+    
+                    // next hand if both scores < 200
+                    checkForWinner()
+                }
+    
+                if (chosenCard[0].changeTurn) {
+                    playerTurn = !playerTurn
+    
+                    // cpu's turn
+                    cpuTurn()
+                }
+            }
+        }
+
+        
+    }
+}
+
 
 ///////START GAME////////
 const startGame = () => {
     newHand()
     updateScores()
 
+    let playerTurn = true
 
     // set event listeners on playerHandDom and drawPileDom
     playerHandDom.addEventListener('click', (event) => {
-        console.log(event.target) // TODO: remove
-        // use target's class to find card object in array
-        let index = parseInt(event.target.getAttribute('id'))
-        // if value or color matches topOfPlayPile OR color = 'any'
-        if (playerHand[index].value === topOfPlayPile[0].value || playerHand[index].color === topOfPlayPile[0].color || playerHand[index].color === 'any' || topOfPlayPile[0].color === 'any') {
-            console.log("You can play that card!")
-            // set topOfPlayPile to target.src
-            topOfPlayPile.length = 0
-            let chosenCard = playerHand.splice(index, 1)
-            topOfPlayPile.push(chosenCard[0])
+        if (playerTurn) {
+            console.log(event.target) // TODO: remove
 
-            // clear the playPile
-            playPileDom.innerHTML = ''
+            // use target's class to find card object in array
+            let index = parseInt(event.target.getAttribute('id'))
+            
+            // if value or color matches topOfPlayPile OR color = 'any'
+            if (playerHand[index].value === topOfPlayPile[0].value || playerHand[index].color === topOfPlayPile[0].color || playerHand[index].color === 'any' || topOfPlayPile[0].color === 'any') {
+                console.log("You can play that card!")
+            
+                // set topOfPlayPile to target.src
+                topOfPlayPile.length = 0
+                let chosenCard = playerHand.splice(index, 1)
+                topOfPlayPile.push(chosenCard[0])
 
-            // add played card to playPile
-            const newCard = document.createElement('img')
-            const imgSrc = topOfPlayPile[0].src
-            console.log(imgSrc) // TODO:: remove
-            newCard.setAttribute('src', imgSrc)
-            playPileDom.appendChild(newCard)
+                // clear the playPile
+                playPileDom.innerHTML = ''
 
-            // check playerHand length and update DOM
-            if (playerHand.length > 1) {
-                updateHand(playerHand, playerHandDom)
-            } else if (playerHand.length === 1) {
-                updateHand(playerHand, playerHandDom)
-                alert("You declare UNO!")
+                // add played card to playPile
+                const newCard = document.createElement('img')
+                const imgSrc = topOfPlayPile[0].src
+                console.log(imgSrc) // TODO:: remove
+                newCard.setAttribute('src', imgSrc)
+                playPileDom.appendChild(newCard)
+
+                // check playerHand length and update DOM
+                if (playerHand.length > 1) {
+                    updateHand(playerHand, playerHandDom)
+                } else if (playerHand.length === 1) {
+                    updateHand(playerHand, playerHandDom)
+                    alert("You declare UNO!")
+                }
+                else {
+                    // tally points
+                    tallyPoints(cpuHand)
+                    updateScores()
+                    alert("You won the round!")
+
+                    // next hand if both scores < 200
+                    checkForWinner()
+                }
+
+                if (chosenCard[0].changeTurn) {
+                    playerTurn = !playerTurn
+
+                    // cpu's turn
+                    cpuTurn()
+                }
             }
             else {
-                // tally points
-                tallyPoints(cpuHand)
-                updateScores()
-                alert("You won the round!")
-
-                // next hand if both scores < 200
-                checkForWinner()
+                alert("Sorry, you can't play that card...")
             }
-            
         }
-        else {
-            alert("Sorry, you can't play that card...")
-        }
+        
     })
     
     let areYouSure = false
