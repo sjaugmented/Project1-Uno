@@ -97,27 +97,30 @@ function dealCards() {
         // put cards on the DOM
         const cpuCard = document.createElement('img')
         cpuCard.setAttribute('src', '/images/back.png')
-        cpuCard.setAttribute('class', i)
+        cpuCard.setAttribute('class', 'cpu')
         cpuHandDom.appendChild(cpuCard)
 
         const playerCard = document.createElement('img')
         playerCard.setAttribute('src', playerHand[i].src)
-        playerCard.setAttribute('class', i)
+        playerCard.setAttribute('class', 'player')
+        playerCard.setAttribute('id', i)
         playerHandDom.appendChild(playerCard)
     }
 }
 
 function startPlayPile() {
-    // set first play card to first card in the deck that is a number card
+    // find first card that isn't an action card
     const playCard = document.createElement('img')
+    
     for (let i = 0; i < deck.length; i++) {
-        if (deck[i].value < 10) {
-            playCard.setAttribute('src', deck[i].src)
-            topOfPlayPile = deck.shift()
+        if (deck[i].color !== "any" && deck[i].value <= 9) {
+            console.log(deck[i]) // TODO remove
+            topOfPlayPile = deck.splice(i, 1)
             break
         }
-        else deck.push(deck.shift())
     }
+    // play card to the playPile
+    playCard.setAttribute('src', topOfPlayPile[0].src)
     playPileDom.appendChild(playCard)
 }
 
@@ -145,14 +148,41 @@ const startGame = () => {
 
     // set event listeners on playerHandDom and drawPileDom
     playerHandDom.addEventListener('click', (event) => {
+        console.log(event.target)
         // use target's class to find card object in array
-        let index = parseInt(event.target.getAttribute('class'))
+        let index = parseInt(event.target.getAttribute('id'))
         // if value or color matches topOfPlayPile OR color = 'any'
-        if (playerHand[index].value === topOfPlayPile.value || playerHand[index].color === topOfPlayPile.color || playerHand[index].color === 'any') {
+        if (playerHand[index].value === topOfPlayPile[0].value || playerHand[index].color === topOfPlayPile[0].color || playerHand[index].color === 'any' || topOfPlayPile[0].color === 'any') {
             console.log("You can play that card!")
-            event.target.remove()
-            topOfPlayPile = playerHand.splice(index, 1)
-            playPileDom.setAttribute('src', topOfPlayPile.src)
+            // set topOfPlayPile to target.src
+            topOfPlayPile.length = 0
+            let chosenCard = playerHand.splice(index, 1)
+            topOfPlayPile.push(chosenCard[0])
+
+            // clear the playPile
+            playPileDom.innerHTML = ''
+
+            // add played card to playPile
+            const newCard = document.createElement('img')
+            const imgSrc = topOfPlayPile[0].src
+            console.log(imgSrc)
+            newCard.setAttribute('src', imgSrc)
+            playPileDom.appendChild(newCard)
+
+            // check playerHand length and update DOM
+            playerHandDom.innerHTML = ''
+            if (playerHand.length > 1) {
+                updateHand(playerHand, playerHandDom)
+            } else if (playerHand.length === 1) {
+                alert("You declare UNO!")
+                updateHand(playerHand, playerHandDom)
+            }
+            else {
+                alert("You won the round!")
+            }
+            
+
+            
         }
         else {
             alert("Sorry, you can't play that card...")
@@ -165,3 +195,14 @@ const startGame = () => {
 }
 
 startGame()
+
+function updateHand(handToUpdate, domToUpdate) {
+    for (let i = 0; i < handToUpdate.length; i++) {
+        const updatedCard = document.createElement('img')
+        updatedCard.setAttribute('src', handToUpdate[i].src)
+        updatedCard.setAttribute('class', 'player')
+        // update ID's to match playerHand indexes
+        updatedCard.setAttribute('id', i)
+        domToUpdate.appendChild(updatedCard)
+    }
+}
