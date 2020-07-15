@@ -226,6 +226,17 @@ function updateScores() {
     else playerScoreDom.style.color = 'rgb(121, 2, 2)'
 }
 
+// TODO: maybe come back to this?
+// function changeTurn() {
+//     playerTurn = !playerTurn
+//     if (playerTurn) {
+
+//     }
+//     else {
+
+//     }
+// }
+
 function checkForWinner() {
     if (playerScore < 500 && cpuScore < 500) {
         newHand()
@@ -241,6 +252,25 @@ function checkForWinner() {
             alert('You lost the game.')
         if (cpuScore > 500)
             alert('You won the game!')
+    }
+}
+
+function showPlayerTurnOnDom() {
+    if (playerTurn) {
+        document.querySelector('.player-score-title').style.color = 'rgb(100, 150, 150)'
+        document.querySelector('.cpu-score-title').style.color = 'rgb(6, 37, 62)'
+        // document.querySelector('.player-score-title').style.textDecorationLine = 'underline'
+        // document.querySelector('.player-score-title').style.textDecorationThickness = '2px'
+        // document.querySelector('.cpu-score-title').style.textDecorationLine = ''
+        // document.querySelector('.cpu-score-title').style.textDecorationThickness = ''
+    }
+    else {
+        document.querySelector('.player-score-title').style.color = 'rgb(6, 37, 62)'
+        document.querySelector('.cpu-score-title').style.color = 'rgb(100, 150, 150)'
+        // document.querySelector('.player-score-title').style.textDecorationLine = ''
+        // document.querySelector('.player-score-title').style.textDecorationThickness = ''
+        // document.querySelector('.cpu-score-title').style.textDecorationLine = 'underline'
+        // document.querySelector('.cpu-score-title').style.textDecorationThickness = '2px'
     }
 }
 
@@ -398,7 +428,7 @@ function cpuTurn() {
         else {
             // else cpuTurn() again
             console.log('cpu goes again') // TODO: remove
-            setTimeout(cpuTurn, 1000)
+            setTimeout(cpuTurn, 1500)
 
         }
     }
@@ -441,6 +471,7 @@ function cpuTurn() {
 ///////START GAME////////
 const startGame = () => {
     listenForDevMode()
+    setInterval(showPlayerTurnOnDom, 100)
     newHand()
     updateScores()
 
@@ -494,7 +525,7 @@ const startGame = () => {
                     playerTurn = false
 
                     // cpu's turn
-                    setTimeout(cpuTurn, 1000)
+                    setTimeout(cpuTurn, 1500)
                 }
             }
             else {
@@ -523,7 +554,7 @@ const startGame = () => {
                 // draw card
                 drawCard(playerHand)
                 playerTurn = false;
-                setTimeout(cpuTurn, 1000)
+                setTimeout(cpuTurn, 1500)
             }
             else {
                 if (!areYouSure) {
@@ -535,7 +566,7 @@ const startGame = () => {
                     drawCard(playerHand)
                     areYouSure = false;
                     playerTurn = false
-                    setTimeout(cpuTurn, 1000)
+                    setTimeout(cpuTurn, 1500)
                 }
             }
         }
