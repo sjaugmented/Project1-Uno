@@ -149,6 +149,16 @@ const newHand = () => {
     dealCards()
     // set down first play card that isn't an action card
     startPlayPile()
+
+    if (Math.random() > 0.5) {
+        playerTurn = true
+        alert('Player goes first')
+    }
+    else {
+        playerTurn = false
+        alert('CPU goes first')
+        goCPU()
+    }
 }
 
 function updateHand(handToUpdate) {
@@ -229,10 +239,6 @@ function updateScores() {
 function checkForWinner() {
     if (playerScore < 500 && cpuScore < 500) {
         newHand()
-        playerTurn = !playerTurn
-
-        if (playerTurn) alert('You begin the next round.')
-        else alert('CPU begins the next round.')
     }
         
     else {
@@ -244,8 +250,8 @@ function checkForWinner() {
     }
 }
 
-function cpuTurn() {
-    // first check if top of playPile is drawCard
+function goCPU() {
+    //  check if top of playPile is drawCard
     if (playPile[playPile.length - 1].drawValue > 0) {
         // add however many cards
         for (let i = 0; i < playPile[playPile.length - 1].drawValue; i++) {
@@ -268,7 +274,8 @@ function cpuTurn() {
         if (playable.length === 0) {
             console.log('no cards to play') // TODO: remove
             // draw card
-            drawCard(cpuHand)
+            setTimeout(drawCard, 500, cpuHand)
+            //drawCard(cpuHand)
             // end turn
             console.log('cpu ending turn') // TODO: remove
             playerTurn = true
@@ -276,7 +283,7 @@ function cpuTurn() {
         //if one playable card
         else if (playable.length === 1) {
             chosenCard = playable
-            playCPUCard(chosenCard[0])
+            executeDecision(chosenCard)
         }
         // if more than one playable cards
         else if (playable.length > 1) {
@@ -313,7 +320,7 @@ function cpuTurn() {
                 console.log('cpu chose high card') // TODO: remove
                 console.log(chosenCard[0])  // TODO: remove
 
-                playCPUCard(chosenCard[0])   
+                executeDecision(chosenCard)
 
             }
 
@@ -342,9 +349,27 @@ function cpuTurn() {
                 console.log('cpu chose low card') // TODO: remove
                 console.log(chosenCard[0])  // TODO: remove
 
-                playCPUCard(chosenCard[0])   
+                executeDecision(chosenCard)
+
             }            
         }
+    }
+
+    function executeDecision(chosenCard) {
+        setTimeout(playCPUCard, 500, chosenCard[0])
+        //playCPUCard(chosenCard[0])
+
+        // check cpuHand length and update cpuHandDom
+        setTimeout(updateDOM, 500)
+        //updateDOM()
+
+        // if cpu played a draw card
+        setTimeout(checkIfDrawCard, 1000, chosenCard[0])
+        //checkIfDrawCard(chosenCard[0])
+
+        // determine changeTurn based on played card
+        setTimeout(checkIfSkipCard, 1000, chosenCard[0])
+        checkIfSkipCard(chosenCard[0])
     }
 
     function playCPUCard(chosenCard) {
@@ -359,8 +384,33 @@ function cpuTurn() {
 
         newCard.setAttribute('src', imgSrc)
         playPileDom.appendChild(newCard)
+    }
 
-        // check cpuHand length and update cpuHandDom
+    function checkIfDrawCard(chosenCard) {
+        if (chosenCard.drawValue > 0) {
+            alert('CPU played a DRAW' + chosenCard.drawValue + ' card!')
+            console.log('CPU played a DRAW ' + chosenCard.drawValue + ' card!')
+            for (let i = 0; i < chosenCard.drawValue; i++) {
+                setTimeout(drawCard, 100, playerHand)
+            }
+        }
+    }
+
+    function checkIfSkipCard(chosenCard) {
+        if (chosenCard.changeTurn) {
+            // if changeTurn, playerTurn = true
+            console.log('cpu has finished its turn') // TODO: remove
+            playerTurn = true // TODO: check if this is what's throwing off the opening turn of a new ground
+        }
+        else {
+            // else cpuTurn() again
+            console.log('cpu goes again') // TODO: remove
+            goCPU()
+
+        }
+    }
+
+    function updateDOM() {
         if (cpuHand.length > 1) {
             updateHand(cpuHand)
         }
@@ -378,28 +428,6 @@ function cpuTurn() {
 
             // next hand if both scores < 500
             checkForWinner()
-        }
-
-        // if cpu played a draw card
-        if (chosenCard.drawValue > 0) {
-            alert('cpu played a +' + chosenCard.drawValue + ' card!')
-            console.log('cpu played a +' + chosenCard.drawValue + ' card!')
-            for (let i = 0; i < chosenCard.drawValue; i++) {
-                drawCard(playerHand)
-            }
-        }
-
-        // determine changeTurn based on played card
-        if (chosenCard.changeTurn) {
-            // if changeTurn, playerTurn = true
-            console.log('cpu has finished its turn') // TODO: remove
-            playerTurn = true
-        }
-        else {
-            // else cpuTurn() again
-            console.log('cpu goes again') // TODO: remove
-            cpuTurn()
-
         }
     }
 
@@ -454,7 +482,7 @@ const startGame = () => {
             let index = parseInt(event.target.getAttribute('id'))
             
             // if value or color matches topOfPlayPile OR color = 'any'
-            if (playerHand[index].value === playPile[playPile.length - 1].value || playerHand[index].color === playPile[playPile.length - 1].color || playerHand[index].color === 'any' || playPile[playPile.length - 1].color === 'any') {            
+            if (playerHand[index].value === playPile[playPile.length - 1].value || playerHand[index].color === playPile[playPile.length - 1].color || playerHand[index].color === 'any' || playPile[playPile.length - 1].color === 'any') {
                 // set topOfPlayPile to target.src
                 //topOfPlayPile.length = 0
                 let cardToPlay = playerHand.splice(index, 1)
@@ -469,8 +497,11 @@ const startGame = () => {
                 newCard.setAttribute('src', imgSrc)
                 playPileDom.appendChild(newCard)
 
+                console.log('you played:') // TODO: remove
+                console.log(cardToPlay[0])
+
                 // invoke cpuTurn to add cards if there are any
-                cpuTurn()
+                goCPU()
 
                 // check playerHand length and update DOM
                 if (playerHand.length > 1) {
@@ -494,13 +525,17 @@ const startGame = () => {
                     playerTurn = false
 
                     // cpu's turn
-                    cpuTurn()
+                    setTimeout(goCPU, 500)
                 }
             }
             else {
                 alert("Can't play that card, bro.")
             }
         }
+    })
+
+    playerHandDom.addEventListener('mouseover',(e) => {
+        // make cards bigger
     })
     
     let areYouSure = false
@@ -523,7 +558,7 @@ const startGame = () => {
                 // draw card
                 drawCard(playerHand)
                 playerTurn = false;
-                cpuTurn()
+                goCPU()
             }
             else {
                 if (!areYouSure) {
@@ -535,7 +570,7 @@ const startGame = () => {
                     drawCard(playerHand)
                     areYouSure = false;
                     playerTurn = false
-                    cpuTurn()
+                    goCPU()
                 }
             }
         }

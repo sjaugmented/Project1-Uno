@@ -16,7 +16,7 @@ body {
   margin: auto;
   margin-top: 50px;
   margin-bottom: -50px;
-  font: Avenir;
+  font-family: 'Avenir Next'
 }
 
 #grad {
@@ -64,3 +64,8 @@ body {
 img {
     width: 100px;
 }
+
+.player-hand img:hover {
+    transform: translateY(-20px);
+    transition: all 0.2s ease-in-out;
+  }
