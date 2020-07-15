@@ -64,3 +64,8 @@ body {
 img {
     width: 100px;
 }
+
+.player-hand img:hover {
+    transform: translateY(-30px);
+    transition: all 0.2s ease-in-out;
+  }

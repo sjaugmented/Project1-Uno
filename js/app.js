@@ -398,7 +398,7 @@ function cpuTurn() {
         else {
             // else cpuTurn() again
             console.log('cpu goes again') // TODO: remove
-            cpuTurn()
+            setTimeout(cpuTurn, 1000)
 
         }
     }
@@ -494,7 +494,7 @@ const startGame = () => {
                     playerTurn = false
 
                     // cpu's turn
-                    cpuTurn()
+                    setTimeout(cpuTurn, 1000)
                 }
             }
             else {
@@ -523,7 +523,7 @@ const startGame = () => {
                 // draw card
                 drawCard(playerHand)
                 playerTurn = false;
-                cpuTurn()
+                setTimeout(cpuTurn, 1000)
             }
             else {
                 if (!areYouSure) {
@@ -535,7 +535,7 @@ const startGame = () => {
                     drawCard(playerHand)
                     areYouSure = false;
                     playerTurn = false
-                    cpuTurn()
+                    setTimeout(cpuTurn, 1000)
                 }
             }
         }
