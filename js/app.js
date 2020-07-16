@@ -486,12 +486,12 @@ function showUno(unoHand) {
         setTimeout(() => {
             playerUno.classList.remove('shout')
             console.log('removed SHOUT from', playerUno)
-        }, 500)
+        }, 1000)
         // setTimeout = after x seconds re-add hidden
         setTimeout(() => {
             playerUno.classList.add('hidden')
             console.log('added HIDDEN to', playerUno)
-        }, 500)
+        }, 1000)
     }
     else {
         const cpuUno = document.querySelector('.cpu-animation')
@@ -519,6 +519,51 @@ function hitWithDrawCard() {
     }, 1000)
 }
 
+function showColorPicker() {
+    // show the color picker
+    const colorPicker = document.querySelector('.color-picker')
+    colorPicker.style.opacity = 1
+
+    //assign eventHandler's to buttons
+    document.querySelector('.red').addEventListener('click', (e) => {
+        // pass thru the class name for color
+        chooseColor(e.target.className)
+    })
+    document.querySelector('.green').addEventListener('click', (e) => {
+        // pass thru the class name for color
+        chooseColor(e.target.className)
+    })
+    document.querySelector('.blue').addEventListener('click', (e) => {
+        // pass thru the class name for color
+        chooseColor(e.target.className)
+    })
+    document.querySelector('.yellow').addEventListener('click', (e) => {
+        // pass thru the class name for color
+        chooseColor(e.target.className)
+    })
+}
+
+function chooseColor(className) {
+    //assign the color to the wild on top of the play pile
+    playPile[playPile.length - 1].color = className
+
+    // hide the color picker
+    const colorPicker = document.querySelector('.color-picker')
+    colorPicker.style.opacity = 0
+
+    skipOrEndTurn()
+}
+
+function skipOrEndTurn() {
+    // check if changeTurn or skip
+    if (playPile[playPile.length - 1].changeTurn) {
+        playerTurn = false
+
+        // cpu's turn
+        setTimeout(cpuTurn, 1500)
+    }
+}
+
 ///////START GAME////////
 const startGame = () => {
     listenForDevMode()
@@ -528,31 +573,20 @@ const startGame = () => {
 
 
     // set event listeners on playerHandDom and drawPileDom
+    // playerHandDom
     playerHandDom.addEventListener('click', (event) => {
         if (playerTurn && event.target.getAttribute('id')) {
-            console.log(event.target) // TODO: remove
 
-            // use target's class to find card object in array
+            // use target's ID to find card object in array
             let index = parseInt(event.target.getAttribute('id'))
             
             // if value or color matches topOfPlayPile OR color = 'any'
             if (playerHand[index].value === playPile[playPile.length - 1].value || playerHand[index].color === playPile[playPile.length - 1].color || playerHand[index].color === 'any' || playPile[playPile.length - 1].color === 'any') {            
                 // set topOfPlayPile to target.src
                 //topOfPlayPile.length = 0
-                let cardToPlay = playerHand.splice(index, 1)
-                cardToPlay[0].playedByPlayer = true;
-                playPile.push(cardToPlay[0])
+                let cardToPlay = playPlayerCard(index)
 
-                // clear the playPile
-                playPileDom.innerHTML = ''
-
-                // add played card to playPile
-                const newCard = document.createElement('img')
-                const imgSrc = playPile[playPile.length - 1].src
-                newCard.setAttribute('src', imgSrc)
-                playPileDom.appendChild(newCard)
-
-                // invoke cpuTurn to add cards if there are any
+                // invoke cpuTurn to add cards if there are any to add
                 cpuTurn()
 
                 // check playerHand length and update DOM
@@ -574,12 +608,16 @@ const startGame = () => {
                     checkForWinner()
                 }
 
-                if (cardToPlay[0].changeTurn) {
-                    playerTurn = false
-
-                    // cpu's turn
-                    setTimeout(cpuTurn, 1500)
+                //check if wild
+                if (playPile[playPile.length - 1].color === 'any') {
+                    // set new color
+                    showColorPicker()
+                    return
                 }
+
+                skipOrEndTurn();
+                
+                
             }
             else {
                 // alert("Can't play that card, bro.")
@@ -601,7 +639,6 @@ const startGame = () => {
                     break
                 }
                 else anythingPlayable = false // TODO: remove - probably don't need this
-                console.log('anything playable?', anythingPlayable ) // TODO: remove
             }
 
             if (!anythingPlayable) {
@@ -628,10 +665,25 @@ const startGame = () => {
     })
 }
 
+function playPlayerCard(index) {
+    let cardToPlay = playerHand.splice(index, 1)
+    cardToPlay[0].playedByPlayer = true
+    playPile.push(cardToPlay[0])
+
+    // clear the playPile
+    playPileDom.innerHTML = ''
+
+    // add played card to playPile
+    const newCard = document.createElement('img')
+    const imgSrc = playPile[playPile.length - 1].src
+    newCard.setAttribute('src', imgSrc)
+    playPileDom.appendChild(newCard)
+    return cardToPlay
+}
+
 function listenForDevMode() {
     document.addEventListener('keydown', event => {
         const key = event.key.toLowerCase()
-        console.log(key) //TODO: remove
 
         if (key === 'p') {
             playerTurn = true;
