@@ -22,18 +22,19 @@ let playerScore = 0;
 
 let playerTurn = true
 
-let cpuDelay = Math.floor((Math.random() * cpuHand.length * 200) + 1000)
+let cpuDelay = Math.floor((Math.random() * cpuHand.length * 200) + 1500)
 
-let gameOver = 1
+let gameOver = 100
 
 // audio objects
 const shuffleFX = new Audio('audio/shuffle.wav')
-const playCardFX = new Audio('audio/playCard.wav')
+const playCardFX = new Audio('audio/playCardNew.wav')
 const drawCardFX = new Audio('audio/drawCard.wav')
 const winRoundFX = new Audio('audio/winRound.wav')
 const winGameFX = new Audio('audio/winGame.wav')
 const loseFX = new Audio('audio/lose.wav')
 const plusCardFX = new Audio('audio/plusCard.wav')
+const unoFX = new Audio('audio/uno.wav')
 
 class Card {
     constructor(color, value, points, changeTurn, drawValue, imgSrc) {
@@ -224,6 +225,23 @@ function drawCard(handGetsCard) {
     }
     drawCardFX.play()
     updateHand(handGetsCard)
+
+    // const drawnCard = document.createElement('img')
+    // drawnCard.setAttribute('src', 'images/back.png')
+    // drawPileDom.appendChild(drawnCard)
+
+    // if (handGetsCard === playerHand) {
+    //     drawnCard.setAttribute('class', 'cpu-play-card')
+    // }
+    // else {
+    //     drawnCard.setAttribute('class', 'play-card')
+    // }
+    // drawCardFX.play()
+    
+    // setTimeout(() => {
+    //     drawnCard.remove()
+    //     updateHand(handGetsCard)
+    // }, 350)
 }
 
 function tallyPoints(loserHand) {
@@ -255,6 +273,15 @@ function updateScores() {
 
 function checkForWinner() {
     if (playerScore < gameOver && cpuScore < gameOver) {
+        if (playerHand.length === 0) {
+            winRoundFX.play()
+            endRound('You')
+        }
+        else {
+            loseFX.play()
+            endRound('CPU')
+        }
+
         newHand()
         playerTurn = !playerTurn
 
@@ -401,67 +428,88 @@ function cpuTurn() {
         // make topOfPlayPile removed card
         console.log('playing card:') // TODO: remove
         console.log(chosenCard)
-        playPile.push(chosenCard)
-        // update playPileDom
-        playPileDom.innerHTML = ''
-        const newCardImg = document.createElement('img')
-        const imgSrc = playPile[playPile.length - 1].src
-
-        newCardImg.setAttribute('src', imgSrc)
-        playPileDom.appendChild(newCardImg)
-
+        
+        //animate random card from cpuHandDom
+        const cpuDomCards = cpuHandDom.childNodes
+        cpuDomCards[Math.floor(Math.random() * cpuDomCards.length)].classList.add('cpu-play-card')
+        console.log('animating CPU card')
         playCardFX.play()
+        
+        setTimeout(() => {
+            playPile.push(chosenCard)
+            // update playPileDom
+            playPileDom.innerHTML = ''
+            const newCardImg = document.createElement('img')
+            const imgSrc = playPile[playPile.length - 1].src
 
-        // check if cpu played wild
-        if (playPile[playPile.length - 1].color === 'any' && playPile[playPile.length - 1].drawValue === 0) {
-            console.log('cpu played a wild') // TODO: remove
-            chooseColorAfterWild()
-        }
+            newCardImg.setAttribute('src', imgSrc)
+            playPileDom.appendChild(newCardImg)
 
-        // check cpuHand length and update cpuHandDom
-        if (cpuHand.length > 1) {
-            updateHand(cpuHand)
-        }
-        // determine uno
-        else if (cpuHand.length === 1) {
-            updateHand(cpuHand)
-            showUno(cpuUno)
-        }
-        // if end of round
-        else {
-            // tally points & update scores
-            tallyPoints(playerHand)
-            updateScores()
-            //alert("CPU won the round!") // TODO: make element rather than alert
-            loseFX.play()
-            endRound('CPU')
 
-            // next hand if both scores < gameOver
-            checkForWinner()
-        }
-
-        // if cpu played a draw card
-        if (chosenCard.drawValue > 0) {
-            // alert('cpu played a +' + chosenCard.drawValue + ' card!')
-            hitWithDrawCard()
-            console.log('cpu played a +' + chosenCard.drawValue + ' card!')
-            for (let i = 0; i < chosenCard.drawValue; i++) {
-                drawCard(playerHand)
+            // check if cpu played wild
+            if (playPile[playPile.length - 1].color === 'any' && playPile[playPile.length - 1].drawValue === 0) {
+                console.log('cpu played a wild') // TODO: remove
+                chooseColorAfterWild()
             }
-        }
 
-        // determine changeTurn based on played card
-        if (chosenCard.changeTurn) {
-            // if changeTurn, playerTurn = true
-            console.log('cpu has finished its turn') // TODO: remove
-            playerTurn = true
-        }
-        else {
-            // else cpuTurn() again
-            console.log('cpu goes again') // TODO: remove
-            setTimeout(cpuTurn, cpuDelay)
+            // check cpuHand length and update cpuHandDom
+            if (cpuHand.length > 1) {
+                updateHand(cpuHand)
+            }
+            // determine uno
+            else if (cpuHand.length === 1) {
+                updateHand(cpuHand)
+                showUno(cpuUno)
+            }
+            // if end of round
+            else {
+                // tally points & update scores
+                tallyPoints(playerHand)
+                updateScores()
+                //alert("CPU won the round!") // TODO: make element rather than alert
+                // loseFX.play()
+                // endRound('CPU')
 
-        }
+                // next hand if both scores < gameOver
+                checkForWinner()
+            }
+
+            // if cpu played a draw card
+            if (chosenCard.drawValue > 0) {
+                // alert('cpu played a +' + chosenCard.drawValue + ' card!')
+                console.log('cpu played a +' + chosenCard.drawValue + ' card!')
+                hitWithDrawCard()
+                setTimeout(() => {
+                    for (let i = 0; i < chosenCard.drawValue; i++) {
+                        drawCard(playerHand)
+                    }
+                    if (chosenCard.changeTurn) {
+                        // if changeTurn, playerTurn = true
+                        console.log('cpu has finished its turn') // TODO: remove
+                        playerTurn = true
+                    }
+                    else {
+                        // else cpuTurn() again
+                        console.log('cpu goes again') // TODO: remove
+                        setTimeout(cpuTurn, cpuDelay)
+                    }
+                },1000)
+            }
+
+            // determine changeTurn based on played card
+            else if (chosenCard.changeTurn) {
+                // if changeTurn, playerTurn = true
+                console.log('cpu has finished its turn') // TODO: remove
+                playerTurn = true
+            }
+            else {
+                // else cpuTurn() again
+                console.log('cpu goes again') // TODO: remove
+                setTimeout(cpuTurn, cpuDelay)
+
+            }
+        }, 110)
+        
     }
 
     function determinePlayableCards() {
@@ -536,6 +584,7 @@ function cpuTurn() {
 function showUno(unoHand) {
     // remove hidden class from player-uno div
     unoHand.classList.remove('hidden')
+    unoFX.play()
     console.log('removed HIDDEN from', unoHand)
 
     // add shout class
@@ -626,8 +675,8 @@ function endGame(winner) {
     const endOfGameDom = document.querySelector('.end-of-game')
     const gameDom = document.querySelector('.game')
     endOfGameDom.classList.remove('hidden')
-    if (winner === 'You') gameDom.textContent = winner + ' won the game! Play again?'
-    else gameDom.textContent = winner + ' won the game... Try again?'
+    if (winner === 'You') gameDom.textContent = 'You won the game! Play again?'
+    else gameDom.textContent = 'CPU won the game... Try again?'
 
     document.querySelector('.play-again').addEventListener('click', () => {
         endOfGameDom.classList.add('hidden')
@@ -659,44 +708,52 @@ const startGame = () => {
             let index = parseInt(event.target.getAttribute('id'))
             
             // if value or color matches topOfPlayPile OR color = 'any'
-            if (playerHand[index].value === playPile[playPile.length - 1].value || playerHand[index].color === playPile[playPile.length - 1].color || playerHand[index].color === 'any' || playPile[playPile.length - 1].color === 'any') {            
-                // set topOfPlayPile to target.src
-                //topOfPlayPile.length = 0
-                let cardToPlay = playPlayerCard(index)
-
-                // invoke cpuTurn to add cards if there are any to add
-                cpuTurn()
-
-                // check playerHand length and update DOM
-                if (playerHand.length > 1) {
-                    updateHand(playerHand)
-                }
-                else if (playerHand.length === 1) {
-                    updateHand(playerHand)
-                    // TODO: showUno()
-                    showUno(playerUno)
-                }
-                else {
-                    // tally points
-                    tallyPoints(cpuHand)
-                    updateScores()
-                    //alert("You won the round!")
-                    winRoundFX.play()
-                    endRound('You')
-
-                    // next hand if both scores < gameOver
-                    checkForWinner()
-                }
-
-                //check if wild
-                if (playPile[playPile.length - 1].color === 'any' && playPile[playPile.length - 1].drawValue === 0) {
-                    // set new color
-                    showColorPicker()
-                    return
-                }
-
-                skipOrEndTurn();
+            if (playerHand[index].value === playPile[playPile.length - 1].value || playerHand[index].color === playPile[playPile.length - 1].color || playerHand[index].color === 'any' || playPile[playPile.length - 1].color === 'any') {     
                 
+                // animate clicked card
+                event.target.classList.add('play-card')
+                console.log(event.target)
+                playCardFX.play()
+
+                setTimeout(() => {
+                    // set topOfPlayPile to target.src
+                    //topOfPlayPile.length = 0
+                    playPlayerCard(index)
+
+
+                    // invoke cpuTurn to add cards if there are any to add
+                    cpuTurn()
+                    
+                    // check playerHand length and update DOM
+                    if (playerHand.length > 1) {
+                        updateHand(playerHand)
+                    }
+                    else if (playerHand.length === 1) {
+                        updateHand(playerHand)
+                        // TODO: showUno()
+                        showUno(playerUno)
+                    }
+                    else {
+                        // tally points
+                        tallyPoints(cpuHand)
+                        updateScores()
+                        //alert("You won the round!")
+                        // winRoundFX.play()
+                        // endRound('You')
+
+                        // next hand if both scores < gameOver
+                        checkForWinner()
+                    }
+
+                    //check if wild
+                    if (playPile[playPile.length - 1].color === 'any' && playPile[playPile.length - 1].drawValue === 0) {
+                        // set new color
+                        showColorPicker()
+                        return
+                    }
+
+                    skipOrEndTurn();
+                }, 350)
                 
             }
             else {
@@ -758,8 +815,6 @@ function playPlayerCard(index) {
     const imgSrc = playPile[playPile.length - 1].src
     newCard.setAttribute('src', imgSrc)
     playPileDom.appendChild(newCard)
-    playCardFX.play()
-    return cardToPlay
 }
 
 function listenForDevMode() {

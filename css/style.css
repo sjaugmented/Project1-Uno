@@ -109,6 +109,16 @@ img {
     top: 100px;
 }
 
+.play-card {
+    transform: translateY(-250px);
+    transition: all 0.3s ease-in
+}
+
+.cpu-play-card {
+    transform: translateY(250px);
+    transition: all 0.1s ease-in
+}
+
 .hidden {
     display: none;
 }
