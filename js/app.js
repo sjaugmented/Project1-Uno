@@ -27,6 +27,7 @@ class Card {
         this.changeTurn = changeTurn
         this.drawValue = drawValue
         this.src = imgSrc
+        this.playedByPlayer = false
     }
 }
 
@@ -87,6 +88,7 @@ const createDeck = () => {
 function shuffleDeck(deck){
     console.log('shuffling', deck)  // TODO: remove
     for (let i = deck.length - 1; i > 0; i--) {
+        deck[i].playedByPlayer = false
         let j = Math.floor(Math.random() * (i + 1))
         let temp = deck[i]
         deck[i] = deck[j]
@@ -276,7 +278,7 @@ function showPlayerTurnOnDom() {
 
 function cpuTurn() {
     // first check if top of playPile is drawCard
-    if (playPile[playPile.length - 1].drawValue > 0) {
+    if (playPile[playPile.length - 1].playedByPlayer === true && playPile[playPile.length - 1].drawValue > 0) {
         // add however many cards
         for (let i = 0; i < playPile[playPile.length - 1].drawValue; i++) {
             drawCard(cpuHand)
@@ -318,7 +320,7 @@ function cpuTurn() {
             
             // run strategist to determine strategy
             // if strategist > 0.5 || playerHand <= 3
-            if (strategist > 0.5 || playerHand.length < 3) {
+            if (strategist > 0.7 || playerHand.length < 3 || cpuHand.length > playerHand.length * 2) {
                 // prioritize action/high point cards
                 let highestValue = 0
 
@@ -457,7 +459,7 @@ function cpuTurn() {
             console.log('last card played:') // TODO: remove
             console.log(playPile[playPile.length - 1])
             for (let i = 0; i < cpuHand.length; i++) {
-                if (cpuHand[i].color === playPile[playPile.length - 1].color || cpuHand[i].value === playPile[playPile.length - 1].value) {
+                if (cpuHand[i].color === playPile[playPile.length - 1].color || cpuHand[i].value === playPile[playPile.length - 1].value || cpuHand[i].color === 'any') {
                     let validCard = cpuHand.splice(i, 1)
                     playableCards.push(validCard[0])
                 }
@@ -538,6 +540,7 @@ const startGame = () => {
                 // set topOfPlayPile to target.src
                 //topOfPlayPile.length = 0
                 let cardToPlay = playerHand.splice(index, 1)
+                cardToPlay[0].playedByPlayer = true;
                 playPile.push(cardToPlay[0])
 
                 // clear the playPile
@@ -598,7 +601,7 @@ const startGame = () => {
                     break
                 }
                 else anythingPlayable = false // TODO: remove - probably don't need this
-                console.log('anything playable?', anythingPlayable )
+                console.log('anything playable?', anythingPlayable ) // TODO: remove
             }
 
             if (!anythingPlayable) {

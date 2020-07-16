@@ -62,12 +62,15 @@ body {
 img {
     width: 100px;
     margin-left: -28px;
+    border-radius: 0px;
+    /* background: #00628d; */
+    box-shadow:  -7px -7px 14px #00405c
 }
 
 .player-hand img:hover {
     /* transform: translateY(-200px); */
     /* transition: all 0.2s ease-in-out; */
-    transform: scale(1.1) translateY(-8px);
+    transform: scale(1.05) translateY(-8px);
     transition: all 0.1s ease-in-out;
     /* box-shadow:  -29px 29px 58px #008ab4, 
              29px -29px 58px #00eaff; */
@@ -79,7 +82,7 @@ img {
 }
 
 .draw-pile img:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
     transition: all 0.1s ease-in-out;
     cursor: pointer;
 }
@@ -105,12 +108,12 @@ img {
 }
 
 .shout img {
-    transform: scale(4);
-    transition: all 0.5s ease-in-out;
+    transform: scale(2.5);
+    transition: all 1s ease-in-out;
 }
 
 .player-animation img {
-    transition: all 0.5s ease-in-out;
+    transition: all 1s ease-in-out;
 }
 
 .end-of {
