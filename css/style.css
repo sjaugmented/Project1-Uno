@@ -10,18 +10,16 @@ html {
 }
 body {
   box-sizing: border-box;
-  //background-color: rgb(38, 94, 136);
-  width: 800px;
-  height: 800px;
+  /* background-color: rgb(38, 94, 136); */
+  background-image: linear-gradient(to bottom right, rgb(46, 118, 172), rgb(15, 66, 87));
+  background-size: 100vw 100vh;
+  width: 100vw;
+  height: 100vh;
   margin: auto;
   margin-top: 50px;
   margin-bottom: -50px;
   font-family: 'Avenir Next'
 }
-
-#grad {
-    background-image: linear-gradient(to bottom right, rgb(46, 118, 172), rgb(15, 66, 87));
-  }
 
 .cpu-hand {
     display: flex;
@@ -32,6 +30,10 @@ body {
 .play-area {
     display: flex;
     justify-content: space-evenly;
+}
+
+.play-pile img {
+    transition: all 1s ease-in-out;
 }
 
 .score {
@@ -63,9 +65,189 @@ body {
 
 img {
     width: 100px;
+    margin-left: -28px;
+    border-radius: 10px;
+    /* background: #00628d; */
+    box-shadow:  -7px -7px 14px #00405c
 }
 
 .player-hand img:hover {
-    transform: translateY(-20px);
-    transition: all 0.2s ease-in-out;
+    /* transform: translateY(-200px); */
+    /* transition: all 0.2s ease-in-out; */
+    transform: scale(1.05) translateY(-8px);
+    transition: all 0.1s ease-in-out;
+    /* box-shadow:  -29px 29px 58px #008ab4, 
+             29px -29px 58px #00eaff; */
+    cursor: pointer;
   }
+
+.player-hand img {
+    transition: all 0.1s ease-in-out; */
+}
+
+.draw-pile img:hover {
+    transform: scale(1.1);
+    transition: all 0.1s ease-in-out;
+    cursor: pointer;
+}
+
+.draw-pile img {
+    transition: all 0.1s ease-in-out;
+}
+
+.player-animation {
+    position: absolute;
+    z-index: 2;
+    left: 75vw;
+    top: 600px;
+}
+
+.cpu-animation {
+    position: absolute;
+    z-index: 2;
+    left: 75vw;
+    top: 100px;
+}
+
+.play-card {
+    transform: translateY(-250px);
+    transition: all 0.3s ease-in
+}
+
+.cpu-play-card {
+    transform: translateY(250px);
+    transition: all 0.1s ease-in
+}
+
+.hidden {
+    display: none;
+}
+
+.shout img {
+    transform: scale(3.5);
+    transition: all 0.1s ease-in-out;
+    border-radius: 0px;
+    box-shadow: none;
+}
+
+.player-animation img {
+    border-radius: 0px;
+    box-shadow: none;
+    transition: all 1s ease-in-out;
+}
+
+.cpu-animation img {
+    border-radius: 0px;
+    box-shadow: none;
+    transition: all 1s ease-in-out;
+}
+
+.end-of-round {
+    position: absolute;
+    z-index: 2;
+    top: 40vh;
+    left: 35vw;
+    width: 30vw;
+    margin: auto;
+    font-size: xx-large;
+    padding: 100px;
+    padding-top: 50px;
+    border: 5px solid #00eaff;
+    border-radius: 20px;
+    padding: 10px;
+    background-color: black;
+    opacity: 0.9;
+}
+
+.end-of-game {
+    position: absolute;
+    z-index: 2;
+    top: 40vh;
+    left: 35vw;
+    width: 30vw;
+    margin: auto;
+    font-size: xx-large;
+    padding: 100px;
+    padding-top: 50px;
+    border: 5px solid #00eaff;
+    border-radius: 20px;
+    padding: 10px;
+    background-color: black;
+    opacity: 0.9;
+}
+
+.end-of-round p {
+    color: #00eaff;
+    text-align: center;
+}
+
+.end-of-game p {
+    color: #00eaff;
+    text-align: center;
+}
+
+.end-of-game button {
+    background-color: greenyellow;
+    color: black;
+    margin-left: 9vw;
+    margin-top: 10px;
+    
+}
+
+.color-picker {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    width: 60vw;
+    margin: auto;
+    margin-top: 20px;
+    text-align: center;
+    opacity: 0;
+}
+
+.color-picker p {
+    color: rgb(134, 174, 204);
+    font-size: large;
+}
+
+button {
+    height: 3vh;
+    width: 10vw;
+    color: white;
+    border-radius: 10px;
+    transition: all 0.1s ease-in-out
+}
+
+button:hover {
+    transform: scale(1.1);
+    transition: all 0.1s ease-in-out;
+    cursor: pointer;
+}
+
+.red {
+    background-color: red;
+}
+
+.green {
+    background-color: green;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.yellow {
+    background-color: yellow;
+    color: black;
+}
+
+.player-uno img {
+    border-radius: 0px;
+    box-shadow: none;
+}
+
+.cpu-uno img {
+    border-radius: 0px;
+    box-shadow: none;
+}
