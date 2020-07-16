@@ -26,6 +26,15 @@ let cpuDelay = Math.floor((Math.random() * cpuHand.length * 200) + 1000)
 
 let gameOver = 1
 
+// audio objects
+const shuffleFX = new Audio('audio/shuffle.wav')
+const playCardFX = new Audio('audio/playCard.wav')
+const drawCardFX = new Audio('audio/drawCard.wav')
+const winRoundFX = new Audio('audio/winRound.wav')
+const winGameFX = new Audio('audio/winGame.wav')
+const loseFX = new Audio('audio/lose.wav')
+const plusCardFX = new Audio('audio/plusCard.wav')
+
 class Card {
     constructor(color, value, points, changeTurn, drawValue, imgSrc) {
         this.color = color
@@ -94,6 +103,7 @@ const createDeck = () => {
 
 function shuffleDeck(deck){
     console.log('shuffling', deck)  // TODO: remove
+    
     for (let i = deck.length - 1; i > 0; i--) {
         deck[i].playedByPlayer = false
         let j = Math.floor(Math.random() * (i + 1))
@@ -102,6 +112,7 @@ function shuffleDeck(deck){
         deck[j] = temp
     }
     console.log(deck, 'shuffled') // TODO: remove
+    shuffleFX.play()
 }
 
 function dealCards() {
@@ -211,7 +222,7 @@ function drawCard(handGetsCard) {
         handGetsCard.push(newCard)
         console.log(handGetsCard, 'drew one card') // TODO: remove
     }
-    
+    drawCardFX.play()
     updateHand(handGetsCard)
 }
 
@@ -242,17 +253,6 @@ function updateScores() {
     else playerScoreDom.style.color = 'rgb(121, 2, 2)'
 }
 
-// TODO: maybe come back to this?
-// function changeTurn() {
-//     playerTurn = !playerTurn
-//     if (playerTurn) {
-
-//     }
-//     else {
-
-//     }
-// }
-
 function checkForWinner() {
     if (playerScore < gameOver && cpuScore < gameOver) {
         newHand()
@@ -266,9 +266,11 @@ function checkForWinner() {
         // game over
         if (playerScore > gameOver)
             //alert('You lost the game.') // TODO: make an element rather than alert
+            loseFX.play()
             endGame('CPU')
         if (cpuScore > gameOver)
             //alert('You won the game!')
+            winGameFX.play()
             endGame('You')
     }
 }
@@ -408,6 +410,8 @@ function cpuTurn() {
         newCardImg.setAttribute('src', imgSrc)
         playPileDom.appendChild(newCardImg)
 
+        playCardFX.play()
+
         // check if cpu played wild
         if (playPile[playPile.length - 1].color === 'any' && playPile[playPile.length - 1].drawValue === 0) {
             console.log('cpu played a wild') // TODO: remove
@@ -429,9 +433,10 @@ function cpuTurn() {
             tallyPoints(playerHand)
             updateScores()
             //alert("CPU won the round!") // TODO: make element rather than alert
+            loseFX.play()
             endRound('CPU')
 
-            // next hand if both scores < 500
+            // next hand if both scores < gameOver
             checkForWinner()
         }
 
@@ -551,6 +556,7 @@ function showUno(unoHand) {
 }
 
 function hitWithDrawCard() {
+    plusCardFX.play()
     playPileDom.classList.add('shout')
     setTimeout(() => {
         playPileDom.classList.remove('shout')
@@ -616,6 +622,7 @@ function endRound(winner) {
 }
 
 function endGame(winner) {
+    console.log('game over')
     const endOfGameDom = document.querySelector('.end-of-game')
     const gameDom = document.querySelector('.game')
     endOfGameDom.classList.remove('hidden')
@@ -674,9 +681,10 @@ const startGame = () => {
                     tallyPoints(cpuHand)
                     updateScores()
                     //alert("You won the round!")
+                    winRoundFX.play()
                     endRound('You')
 
-                    // next hand if both scores < 500
+                    // next hand if both scores < gameOver
                     checkForWinner()
                 }
 
@@ -750,6 +758,7 @@ function playPlayerCard(index) {
     const imgSrc = playPile[playPile.length - 1].src
     newCard.setAttribute('src', imgSrc)
     playPileDom.appendChild(newCard)
+    playCardFX.play()
     return cardToPlay
 }
 
