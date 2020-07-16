@@ -386,11 +386,17 @@ function cpuTurn() {
         playPile.push(chosenCard)
         // update playPileDom
         playPileDom.innerHTML = ''
-        const newCard = document.createElement('img')
+        const newCardImg = document.createElement('img')
         const imgSrc = playPile[playPile.length - 1].src
 
-        newCard.setAttribute('src', imgSrc)
-        playPileDom.appendChild(newCard)
+        newCardImg.setAttribute('src', imgSrc)
+        playPileDom.appendChild(newCardImg)
+
+        // check if cpu played wild
+        if (playPile[playPile.length - 1].color === 'any' && playPile[playPile.length - 1].drawValue === 0) {
+            console.log('cpu played a wild') // TODO: remove
+            chooseColorAfterWild()
+        }
 
         // check cpuHand length and update cpuHandDom
         if (cpuHand.length > 1) {
@@ -468,6 +474,51 @@ function cpuTurn() {
             console.log(playableCards) // TODO: remove
         }
         return playableCards
+    }
+
+    function chooseColorAfterWild() {
+        console.log('cpu picking new color') // TODO: remove
+        const colors = ['red', 'green', 'blue', 'yellow']
+        const colorsInHand = [0, 0, 0, 0]
+
+        // cpu checks how many of each color it has
+        for (const card of cpuHand) {
+            if (card.color === 'red') colorsInHand[0]++
+            if (card.color === 'green') colorsInHand[1]++
+            if (card.color === 'blue') colorsInHand[2]++
+            if (card.color === 'yellow') colorsInHand[3]++
+        }
+
+        // find the index of the max value
+        let indexOfMax
+        let colorCount = 0
+        for (let i = 0; i < colorsInHand.length; i++) {
+            if (colorsInHand[i] > colorCount) {
+                colorCount = colorsInHand[i]
+                indexOfMax = i
+            } 
+        }
+
+        console.log('cpu picked', colors[indexOfMax]) // TODO: remove
+
+        // style the wild card and it's color
+        const wildCardDom = playPileDom.childNodes[0]
+        wildCardDom.style.border = '5px solid ' + colors[indexOfMax]
+        wildCardDom.style.width = '105px'
+        playPile[playPile.length - 1].color = colors[indexOfMax]
+
+        console.log('cpu added border to wild card') // TODO: remove
+
+        
+        // let selection = Math.ceil(Math.Random * 4)
+        // let color;
+
+        // if (selection === 1) {
+        //     playPile.style.border = '5px solid red'
+        // } 
+        // else if (selection === 2) playPile.style.border = '5px solid green'
+        // else if (selection === 3) playPile.style.border = '5px solid blue'
+        // else if (selection === 4) playPile.style.border = '5px solid red'
     }
 }
 
@@ -577,6 +628,10 @@ const startGame = () => {
     playerHandDom.addEventListener('click', (event) => {
         if (playerTurn && event.target.getAttribute('id')) {
 
+            const lastCardDom = playPileDom.childNodes[0]
+            lastCardDom.style.border = 'none'
+            lastCardDom.style.width = '100px'
+
             // use target's ID to find card object in array
             let index = parseInt(event.target.getAttribute('id'))
             
@@ -609,7 +664,7 @@ const startGame = () => {
                 }
 
                 //check if wild
-                if (playPile[playPile.length - 1].color === 'any') {
+                if (playPile[playPile.length - 1].color === 'any' && playPile[playPile.length - 1].drawValue === 0) {
                     // set new color
                     showColorPicker()
                     return

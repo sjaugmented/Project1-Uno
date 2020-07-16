@@ -110,6 +110,8 @@ img {
 .shout img {
     transform: scale(2.5);
     transition: all 1s ease-in-out;
+    border-radius: 0px;
+    box-shadow: none;
 }
 
 .player-animation img {
@@ -150,6 +152,14 @@ button {
     height: 3vh;
     width: 10vw;
     color: white;
+    border-radius: 10px;
+    transition: all 0.1s ease-in-out
+}
+
+button:hover {
+    transform: scale(1.1);
+    transition: all 0.1s ease-in-out;
+    cursor: pointer;
 }
 
 .red {
@@ -169,3 +179,12 @@ button {
     color: black;
 }
 
+.player-uno img {
+    border-radius: 0px;
+    box-shadow: none;
+}
+
+.cpu-uno img {
+    border-radius: 0px;
+    box-shadow: none;
+}
