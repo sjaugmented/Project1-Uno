@@ -170,16 +170,6 @@ const newHand = () => {
     dealCards()
     // set down first play card that isn't an action card
     startPlayPile()
-
-    if (Math.random() > 0.5) {
-        playerTurn = true
-        alert('Player goes first')
-    }
-    else {
-        playerTurn = false
-        alert('CPU goes first')
-        goCPU()
-    }
 }
 
 function updateHand(handToUpdate) {
@@ -355,8 +345,7 @@ function cpuTurn() {
         if (playable.length === 0) {
             console.log('no cards to play') // TODO: remove
             // draw card
-            setTimeout(drawCard, 500, cpuHand)
-            //drawCard(cpuHand)
+            drawCard(cpuHand)
             // end turn
             console.log('cpu ending turn') // TODO: remove
             playerTurn = true
@@ -364,7 +353,7 @@ function cpuTurn() {
         //if one playable card
         else if (playable.length === 1) {
             chosenCard = playable
-            executeDecision(chosenCard)
+            playCPUCard(chosenCard[0])
         }
         // if more than one playable cards
         else if (playable.length > 1) {
@@ -401,7 +390,7 @@ function cpuTurn() {
                 console.log('cpu chose high card') // TODO: remove
                 console.log(chosenCard[0])  // TODO: remove
 
-                executeDecision(chosenCard)
+                playCPUCard(chosenCard[0])   
 
             }
 
@@ -430,27 +419,9 @@ function cpuTurn() {
                 console.log('cpu chose low card') // TODO: remove
                 console.log(chosenCard[0])  // TODO: remove
 
-                executeDecision(chosenCard)
-
+                playCPUCard(chosenCard[0])   
             }            
         }
-    }
-
-    function executeDecision(chosenCard) {
-        setTimeout(playCPUCard, 500, chosenCard[0])
-        //playCPUCard(chosenCard[0])
-
-        // check cpuHand length and update cpuHandDom
-        setTimeout(updateDOM, 500)
-        //updateDOM()
-
-        // if cpu played a draw card
-        setTimeout(checkIfDrawCard, 1000, chosenCard[0])
-        //checkIfDrawCard(chosenCard[0])
-
-        // determine changeTurn based on played card
-        setTimeout(checkIfSkipCard, 1000, chosenCard[0])
-        checkIfSkipCard(chosenCard[0])
     }
 
     function playCPUCard(chosenCard) {
@@ -741,7 +712,7 @@ const startGame = () => {
                 
                 // animate clicked card
                 event.target.classList.add('play-card')
-                console.log('animating', event.target)
+                console.log(event.target)
                 playCardFX.play()
 
                 setTimeout(() => {
@@ -790,10 +761,6 @@ const startGame = () => {
                 // TODO: do you want to do anything here?
             }
         }
-    })
-
-    playerHandDom.addEventListener('mouseover',(e) => {
-        // make cards bigger
     })
     
     let areYouSure = false
@@ -862,9 +829,3 @@ function listenForDevMode() {
 }
 
 startGame()
-
-
-
-
-
-
