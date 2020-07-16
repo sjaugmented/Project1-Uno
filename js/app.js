@@ -712,7 +712,7 @@ const startGame = () => {
                 
                 // animate clicked card
                 event.target.classList.add('play-card')
-                console.log(event.target)
+                console.log('animating', event.target)
                 playCardFX.play()
 
                 setTimeout(() => {
