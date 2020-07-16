@@ -111,7 +111,7 @@ img {
 
 .play-card {
     transform: translateY(-250px);
-    transition: all 0.3s ease-in
+    transition: all 0.1s ease-in
 }
 
 .cpu-play-card {
@@ -250,4 +250,45 @@ button:hover {
 .cpu-uno img {
     border-radius: 0px;
     box-shadow: none;
+}
+
+@media only screen and (max-width: 812px) {
+    body {
+        margin-top: -50px;
+        margin-bottom: 0px;
+    }
+
+    .cpu-hand {
+        margin-bottom: 30px;
+    }
+
+    .play-area {
+
+    }
+
+    .score {
+        font-size: large;
+    }
+
+    .player-hand {
+        margin-top: 30px;
+    }
+    
+    img {
+        width: 70px;
+        margin-left: 0px;
+    }
+
+    .play-card {
+        transform: translateY(-130px);
+    }
+
+    .cpu-play-card {
+        transform: translateY(130px);
+    }
+
+    .shout img {
+        transform: scale(2);
+    }
+    
 }

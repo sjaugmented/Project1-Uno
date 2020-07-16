@@ -508,7 +508,7 @@ function cpuTurn() {
                 setTimeout(cpuTurn, cpuDelay)
 
             }
-        }, 110)
+        }, 200)
         
     }
 
@@ -755,10 +755,6 @@ const startGame = () => {
                     skipOrEndTurn();
                 }, 350)
                 
-            }
-            else {
-                // alert("Can't play that card, bro.")
-                // TODO: do you want to do anything here?
             }
         }
     })
