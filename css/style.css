@@ -251,8 +251,8 @@ button:hover {
     border-radius: 0px;
     box-shadow: none;
 }
-
-@media only screen and (max-width: 812px) {
+/* for landscape iphone X */
+@media only screen and (max-width: 850) {
     body {
         margin-top: -50px;
         margin-bottom: 0px;
@@ -277,6 +277,49 @@ button:hover {
     img {
         width: 70px;
         margin-left: 0px;
+    }
+
+    .play-card {
+        transform: translateY(-130px);
+    }
+
+    .cpu-play-card {
+        transform: translateY(130px);
+    }
+
+    .shout img {
+        transform: scale(2);
+    }
+    
+}
+
+@media only screen and (max-width: 380) {
+    body {
+        margin-top: 50px;
+        margin-bottom: 0px;
+    }
+
+    .cpu-hand {
+        margin-bottom: 30px;
+    }
+
+    .play-area {
+        margin-left: -20px;
+    }
+
+    .score {
+        font-size: xx-small;
+        margin-left: -10px;
+        margin-right: 50px;
+    }
+
+    .player-hand {
+        margin-top: 30px;
+    }
+    
+    img {
+        width: 50px;
+        margin-left: 5px;
     }
 
     .play-card {
