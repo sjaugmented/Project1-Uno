@@ -32,6 +32,10 @@ body {
     justify-content: space-evenly;
 }
 
+.play-pile img {
+    transition: all 1s ease-in-out;
+}
+
 .score {
     display: flex;
     flex-direction: column;
@@ -88,19 +92,21 @@ img {
 }
 
 .draw-pile img {
-    transition: all 0.1s ease-in-out; */
+    transition: all 0.1s ease-in-out;
 }
 
 .player-animation {
-    position: relative;
-    left: 70vw;
-    bottom: 12vh;
+    position: absolute;
+    z-index: 2;
+    left: 75vw;
+    top: 600px;
 }
 
 .cpu-animation {
-    position: relative;
-    left: 70vw;
-    top: -25vh;
+    position: absolute;
+    z-index: 2;
+    left: 75vw;
+    top: 100px;
 }
 
 .hidden {
@@ -108,13 +114,21 @@ img {
 }
 
 .shout img {
-    transform: scale(2.5);
-    transition: all 1s ease-in-out;
+    transform: scale(3.5);
+    transition: all 0.1s ease-in-out;
     border-radius: 0px;
     box-shadow: none;
 }
 
 .player-animation img {
+    border-radius: 0px;
+    box-shadow: none;
+    transition: all 1s ease-in-out;
+}
+
+.cpu-animation img {
+    border-radius: 0px;
+    box-shadow: none;
     transition: all 1s ease-in-out;
 }
 

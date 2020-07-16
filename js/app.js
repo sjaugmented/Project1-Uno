@@ -10,6 +10,9 @@ const playerScoreDom = document.querySelector('#player-score')
 const playPileDom = document.querySelector('.play-pile')
 const drawPileDom = document.querySelector('.draw-pile')
 
+const playerUno = document.querySelector('.player-animation')
+const cpuUno = document.querySelector('.cpu-animation')
+
 const cpuHand = []
 const playerHand = []
 let playPile;
@@ -405,7 +408,7 @@ function cpuTurn() {
         // determine uno
         else if (cpuHand.length === 1) {
             updateHand(cpuHand)
-            showUno(cpuHand)
+            showUno(cpuUno)
         }
         // if end of round
         else {
@@ -523,44 +526,25 @@ function cpuTurn() {
 }
 
 function showUno(unoHand) {
-    if (unoHand === playerHand) {
-        const playerUno = document.querySelector('.player-animation')
+    // remove hidden class from player-uno div
+    unoHand.classList.remove('hidden')
+    console.log('removed HIDDEN from', unoHand)
 
-        // write logic to remove hidden class from player-uno div
-        playerUno.classList.remove('hidden')
-        console.log('removed HIDDEN from', playerUno)
-
-        // add shout class
-        playerUno.classList.add('shout')
-        console.log('added SHOUT to', playerUno)
+    // add shout class
+    setTimeout(() => {
+        unoHand.classList.add('shout')
+        console.log('added SHOUT to', unoHand)
         //setTimeout = after x seconds remove shout
         setTimeout(() => {
-            playerUno.classList.remove('shout')
-            console.log('removed SHOUT from', playerUno)
-        }, 1000)
-        // setTimeout = after x seconds re-add hidden
-        setTimeout(() => {
-            playerUno.classList.add('hidden')
-            console.log('added HIDDEN to', playerUno)
-        }, 1000)
-    }
-    else {
-        const cpuUno = document.querySelector('.cpu-animation')
+            unoHand.classList.remove('shout')
+            console.log('removed SHOUT from', unoHand)
 
-        // write logic to remove hidden class from player-uno div
-        cpuUno.classList.remove('hidden')
-
-        // add shout class
-        cpuUno.classList.add('shout')
-        // setTimeout = after x seconds remove shout
-        setTimeout(() => {
-            cpuUno.classList.remove('shout')
-        }, 500)
-        // setTimeout = after x seconds re-add hidden
-        setTimeout(() => {
-            cpuUno.classList.add('hidden')
-        }, 500)
-    }
+            setTimeout(() => {
+                unoHand.classList.add('hidden')
+                console.log('added HIDDEN to', unoHand)
+            }, 1000)
+        }, 1000)
+    }, 10) 
 }
 
 function hitWithDrawCard() {
@@ -651,7 +635,7 @@ const startGame = () => {
                 else if (playerHand.length === 1) {
                     updateHand(playerHand)
                     // TODO: showUno()
-                    showUno(playerHand)
+                    showUno(playerUno)
                 }
                 else {
                     // tally points
