@@ -132,7 +132,7 @@ img {
     transition: all 1s ease-in-out;
 }
 
-.end-of {
+.end-of-round {
     position: absolute;
     z-index: 2;
     top: 40vh;
@@ -149,14 +149,39 @@ img {
     opacity: 0.9;
 }
 
-.end-of p {
+.end-of-game {
+    position: absolute;
+    z-index: 2;
+    top: 40vh;
+    left: 35vw;
+    width: 30vw;
+    margin: auto;
+    font-size: xx-large;
+    padding: 100px;
+    padding-top: 50px;
+    border: 5px solid #00eaff;
+    border-radius: 20px;
+    padding: 10px;
+    background-color: black;
+    opacity: 0.9;
+}
+
+.end-of-round p {
     color: #00eaff;
     text-align: center;
 }
 
-.end-of p button {
+.end-of-game p {
+    color: #00eaff;
+    text-align: center;
+}
+
+.end-of-game button {
     background-color: greenyellow;
     color: black;
+    margin-left: 9vw;
+    margin-top: 10px;
+    
 }
 
 .color-picker {

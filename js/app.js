@@ -22,6 +22,10 @@ let playerScore = 0;
 
 let playerTurn = true
 
+let cpuDelay = Math.floor((Math.random() * cpuHand.length * 200) + 1000)
+
+let gameOver = 1
+
 class Card {
     constructor(color, value, points, changeTurn, drawValue, imgSrc) {
         this.color = color
@@ -197,8 +201,15 @@ function drawCard(handGetsCard) {
     }
     else {
         // shuffle playPile
-        deck = shuffleDeck(playPile)
-        playPile.length = 0
+        shuffleDeck(playPile)
+        for (let i = 0; i <= playPile.length - 1; i++) {
+            deck.push(playPile[i])
+        }
+        playPile.length = 1
+
+        const newCard = deck.shift()
+        handGetsCard.push(newCard)
+        console.log(handGetsCard, 'drew one card') // TODO: remove
     }
     
     updateHand(handGetsCard)
@@ -222,12 +233,12 @@ function tallyPoints(loserHand) {
 function updateScores() {
     // update cpuScoreDom
     cpuScoreDom.innerHTML = cpuScore
-    if (cpuScore < 250) cpuScoreDom.style.color = 'rgb(0, 140, 0)'
+    if (cpuScore < gameOver / 2) cpuScoreDom.style.color = 'rgb(0, 140, 0)'
     else cpuScoreDom.style.color = 'rgb(121, 2, 2)'
 
     // update playerScoreDom
     playerScoreDom.innerHTML = playerScore
-    if (playerScore < 250) playerScoreDom.style.color = 'rgb(0, 140, 0)'
+    if (playerScore < gameOver / 2) playerScoreDom.style.color = 'rgb(0, 140, 0)'
     else playerScoreDom.style.color = 'rgb(121, 2, 2)'
 }
 
@@ -243,7 +254,7 @@ function updateScores() {
 // }
 
 function checkForWinner() {
-    if (playerScore < 500 && cpuScore < 500) {
+    if (playerScore < gameOver && cpuScore < gameOver) {
         newHand()
         playerTurn = !playerTurn
 
@@ -253,10 +264,12 @@ function checkForWinner() {
         
     else {
         // game over
-        if (playerScore > 500)
-            alert('You lost the game.') // TODO: make an element rather than alert
-        if (cpuScore > 500)
-            alert('You won the game!')
+        if (playerScore > gameOver)
+            //alert('You lost the game.') // TODO: make an element rather than alert
+            endGame('CPU')
+        if (cpuScore > gameOver)
+            //alert('You won the game!')
+            endGame('You')
     }
 }
 
@@ -415,7 +428,8 @@ function cpuTurn() {
             // tally points & update scores
             tallyPoints(playerHand)
             updateScores()
-            alert("CPU won the round!") // TODO: make element rather than alert
+            //alert("CPU won the round!") // TODO: make element rather than alert
+            endRound('CPU')
 
             // next hand if both scores < 500
             checkForWinner()
@@ -440,7 +454,7 @@ function cpuTurn() {
         else {
             // else cpuTurn() again
             console.log('cpu goes again') // TODO: remove
-            setTimeout(cpuTurn, Math.ceil((Math.random * 3000)))
+            setTimeout(cpuTurn, cpuDelay)
 
         }
     }
@@ -511,17 +525,6 @@ function cpuTurn() {
         playPile[playPile.length - 1].color = colors[indexOfMax]
 
         console.log('cpu added border to wild card') // TODO: remove
-
-        
-        // let selection = Math.ceil(Math.Random * 4)
-        // let color;
-
-        // if (selection === 1) {
-        //     playPile.style.border = '5px solid red'
-        // } 
-        // else if (selection === 2) playPile.style.border = '5px solid green'
-        // else if (selection === 3) playPile.style.border = '5px solid blue'
-        // else if (selection === 4) playPile.style.border = '5px solid red'
     }
 }
 
@@ -595,35 +598,32 @@ function skipOrEndTurn() {
         playerTurn = false
 
         // cpu's turn
-        setTimeout(cpuTurn, Math.ceil((Math.random * 3000)))
+        setTimeout(cpuTurn, cpuDelay)
     }
 }
 
 function endRound(winner) {
-    const endOfDom = document.querySelector('.end-of')
+    console.log('round over')
+    const endOfroundDom = document.querySelector('.end-of-round')
     const roundDom = document.querySelector('.round')
-    endOfDom.classList.toggle('hidden')
-    roundDom.classList.toggle('hidden')
+    endOfroundDom.classList.remove('hidden')
     if (winner === 'You') roundDom.textContent = winner + ' won the round!'
     else roundDom.textContent = winner + ' won the round...'
     
     setInterval(() => {
-        endOfDom.classList.toggle('hidden')
-        roundDom.classList.toggle('hidden')
+        endOfroundDom.classList.add('hidden')
     }, 2000)
 }
 
-function endGame() {
-    const endOfDom = document.querySelector('.end-of')
+function endGame(winner) {
+    const endOfGameDom = document.querySelector('.end-of-game')
     const gameDom = document.querySelector('.game')
-    endOfDom.classList.toggle('hidden')
-    gameDom.classList.toggle('hidden')
+    endOfGameDom.classList.remove('hidden')
     if (winner === 'You') gameDom.textContent = winner + ' won the game! Play again?'
     else gameDom.textContent = winner + ' won the game... Try again?'
 
     document.querySelector('.play-again').addEventListener('click', () => {
-        endOfDom.classList.toggle('hidden')
-        gameDom.classList.toggle('hidden')
+        endOfGameDom.classList.add('hidden')
         startGame()
     })
 }
@@ -673,7 +673,8 @@ const startGame = () => {
                     // tally points
                     tallyPoints(cpuHand)
                     updateScores()
-                    alert("You won the round!")
+                    //alert("You won the round!")
+                    endRound('You')
 
                     // next hand if both scores < 500
                     checkForWinner()
@@ -716,7 +717,7 @@ const startGame = () => {
                 // draw card
                 drawCard(playerHand)
                 playerTurn = false;
-                setTimeout(cpuTurn, Math.ceil((Math.random * 3000)))
+                setTimeout(cpuTurn, cpuDelay)
             }
             else {
                 if (!areYouSure) {
@@ -729,7 +730,7 @@ const startGame = () => {
                     drawCard(playerHand)
                     areYouSure = false;
                     playerTurn = false
-                    setTimeout(cpuTurn, Math.ceil((Math.random * 3000)))
+                    setTimeout(cpuTurn, cpuDelay)
                 }
             }
         }
