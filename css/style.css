@@ -10,18 +10,16 @@ html {
 }
 body {
   box-sizing: border-box;
-  //background-color: rgb(38, 94, 136);
-  width: 800px;
-  height: 800px;
+  /* background-color: rgb(38, 94, 136); */
+  background-image: linear-gradient(to bottom right, rgb(46, 118, 172), rgb(15, 66, 87));
+  background-size: 100vw 100vh;
+  width: 100vw;
+  height: 100vh;
   margin: auto;
   margin-top: 50px;
   margin-bottom: -50px;
   font: Avenir;
 }
-
-#grad {
-    background-image: linear-gradient(to bottom right, rgb(46, 118, 172), rgb(15, 66, 87));
-  }
 
 .cpu-hand {
     display: flex;
@@ -63,9 +61,67 @@ body {
 
 img {
     width: 100px;
+    margin-left: -28px;
 }
 
 .player-hand img:hover {
-    transform: translateY(-30px);
-    transition: all 0.2s ease-in-out;
+    /* transform: translateY(-200px); */
+    /* transition: all 0.2s ease-in-out; */
+    transform: scale(1.1) translateY(-8px);
+    transition: all 0.1s ease-in-out;
+    /* box-shadow:  -29px 29px 58px #008ab4, 
+             29px -29px 58px #00eaff; */
+    cursor: pointer;
   }
+
+.player-hand img {
+    transition: all 0.1s ease-in-out; */
+}
+
+.draw-pile img:hover {
+    transform: scale(1.2);
+    transition: all 0.1s ease-in-out;
+    cursor: pointer;
+}
+
+.draw-pile img {
+    transition: all 0.1s ease-in-out; */
+}
+
+.player-animation {
+    position: relative;
+    left: 70vw;
+    bottom: 12vh;
+}
+
+.cpu-animation {
+    position: relative;
+    left: 70vw;
+    top: -25vh;
+}
+
+.hidden {
+    display: none;
+}
+
+.shout img {
+    transform: scale(4);
+    transition: all 0.5s ease-in-out;
+}
+
+.player-animation img {
+    transition: all 0.5s ease-in-out;
+}
+
+.end-of {
+    position: relative;
+    top: -15vh;
+    width: 20vw;
+    margin: auto;
+    font-size: xx-large;
+    padding-top: 50px;
+    border: 2px solid #00eaff;
+    border-radius: 20px;
+    padding: 10px;
+    z-index: 1;
+}

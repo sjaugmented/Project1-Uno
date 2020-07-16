@@ -242,14 +242,14 @@ function checkForWinner() {
         newHand()
         playerTurn = !playerTurn
 
-        if (playerTurn) alert('You begin the next round.')
-        else alert('CPU begins the next round.')
+        // if (playerTurn) alert('You begin the next round.') // TODO: remove
+        // else alert('CPU begins the next round.')
     }
         
     else {
         // game over
         if (playerScore > 500)
-            alert('You lost the game.')
+            alert('You lost the game.') // TODO: make an element rather than alert
         if (cpuScore > 500)
             alert('You won the game!')
     }
@@ -397,14 +397,14 @@ function cpuTurn() {
         // determine uno
         else if (cpuHand.length === 1) {
             updateHand(cpuHand)
-            alert("CPU declares UNO!")
+            showUno(cpuHand)
         }
         // if end of round
         else {
             // tally points & update scores
             tallyPoints(playerHand)
             updateScores()
-            alert("CPU won the round!")
+            alert("CPU won the round!") // TODO: make element rather than alert
 
             // next hand if both scores < 500
             checkForWinner()
@@ -412,7 +412,8 @@ function cpuTurn() {
 
         // if cpu played a draw card
         if (chosenCard.drawValue > 0) {
-            alert('cpu played a +' + chosenCard.drawValue + ' card!')
+            // alert('cpu played a +' + chosenCard.drawValue + ' card!')
+            hitWithDrawCard()
             console.log('cpu played a +' + chosenCard.drawValue + ' card!')
             for (let i = 0; i < chosenCard.drawValue; i++) {
                 drawCard(playerHand)
@@ -468,6 +469,54 @@ function cpuTurn() {
     }
 }
 
+function showUno(unoHand) {
+    if (unoHand === playerHand) {
+        const playerUno = document.querySelector('.player-animation')
+
+        // write logic to remove hidden class from player-uno div
+        playerUno.classList.remove('hidden')
+        console.log('removed HIDDEN from', playerUno)
+
+        // add shout class
+        playerUno.classList.add('shout')
+        console.log('added SHOUT to', playerUno)
+        //setTimeout = after x seconds remove shout
+        setTimeout(() => {
+            playerUno.classList.remove('shout')
+            console.log('removed SHOUT from', playerUno)
+        }, 500)
+        // setTimeout = after x seconds re-add hidden
+        setTimeout(() => {
+            playerUno.classList.add('hidden')
+            console.log('added HIDDEN to', playerUno)
+        }, 500)
+    }
+    else {
+        const cpuUno = document.querySelector('.cpu-animation')
+
+        // write logic to remove hidden class from player-uno div
+        cpuUno.classList.remove('hidden')
+
+        // add shout class
+        cpuUno.classList.add('shout')
+        // setTimeout = after x seconds remove shout
+        setTimeout(() => {
+            cpuUno.classList.remove('shout')
+        }, 500)
+        // setTimeout = after x seconds re-add hidden
+        setTimeout(() => {
+            cpuUno.classList.add('hidden')
+        }, 500)
+    }
+}
+
+function hitWithDrawCard() {
+    playPileDom.classList.add('shout')
+    setTimeout(() => {
+        playPileDom.classList.remove('shout')
+    }, 1000)
+}
+
 ///////START GAME////////
 const startGame = () => {
     listenForDevMode()
@@ -509,7 +558,8 @@ const startGame = () => {
                 }
                 else if (playerHand.length === 1) {
                     updateHand(playerHand)
-                    alert("You declare UNO!")
+                    // TODO: showUno()
+                    showUno(playerHand)
                 }
                 else {
                     // tally points
@@ -529,7 +579,8 @@ const startGame = () => {
                 }
             }
             else {
-                alert("Can't play that card, bro.")
+                // alert("Can't play that card, bro.")
+                // TODO: do you want to do anything here?
             }
         }
     })
@@ -559,6 +610,7 @@ const startGame = () => {
             else {
                 if (!areYouSure) {
                     alert("You sure, bro?")
+                    // TODO: wiggle a playable card or something
                     areYouSure = true
                 }
                 else {

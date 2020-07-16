@@ -7,15 +7,20 @@
     <title>Project 1 - UNO</title>
     <script defer src="/js/app.js"></script>
 </head>
-<body id='grad'>
-    <div class='cpu-hand'>
-        <img src="images/back.png" alt="">
-        <img src="images/back.png" alt="">
-        <img src="images/back.png" alt="">
-        <img src="/images/back.png" alt="">
-        <img src="images/back.png" alt="">
-        <img src="images/back.png" alt="">
-        <img src="images/back.png" alt="">
+<body>
+    <div class='cpu-box'>
+        <div class='cpu-hand'>
+            <img src="images/back.png" alt="">
+            <img src="images/back.png" alt="">
+            <img src="images/back.png" alt="">
+            <img src="/images/back.png" alt="">
+            <img src="images/back.png" alt="">
+            <img src="images/back.png" alt="">
+            <img src="images/back.png" alt="">
+        </div>
+        <div class='cpu-animation hidden'>
+            <img id='cpu-uno' src="images/uno!.png" alt="">
+        </div>
     </div>
     <div class='play-area'>
         <div class='score'>
@@ -30,6 +35,10 @@
             <img src="/images/back.png" alt="">
         </div>
     </div>
+    <!-- <div class='end-of'>
+        <p class='round'>You won the round!</p>
+        <p class='game hidden'>You won the game!</p>
+    </div> -->
     <div class='player-box'>
         <div class='player-hand'>
             <img src="images/blue9.png" alt="">
@@ -40,8 +49,8 @@
             <img src="images/red10.png" alt="">
             <img src="images/yellow11.png" alt=""> -->
         </div>
-        <div>
-            <img src="images/uno!.png" alt="">
+        <div class='player-animation hidden'>
+            <img id='player-uno' src="images/uno!.png" alt="">
         </div>
     </div>
 
