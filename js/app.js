@@ -260,7 +260,7 @@ function checkForWinner() {
     }
 }
 
-function showPlayerTurnOnDom() {
+function showTurnOnDom() {
     if (playerTurn) {
         document.querySelector('.player-score-title').style.color = 'rgb(100, 150, 150)'
         document.querySelector('.cpu-score-title').style.color = 'rgb(6, 37, 62)'
@@ -440,7 +440,7 @@ function cpuTurn() {
         else {
             // else cpuTurn() again
             console.log('cpu goes again') // TODO: remove
-            setTimeout(cpuTurn, 1500)
+            setTimeout(cpuTurn, Math.ceil((Math.random * 3000)))
 
         }
     }
@@ -595,14 +595,46 @@ function skipOrEndTurn() {
         playerTurn = false
 
         // cpu's turn
-        setTimeout(cpuTurn, 1500)
+        setTimeout(cpuTurn, Math.ceil((Math.random * 3000)))
     }
+}
+
+function endRound(winner) {
+    const endOfDom = document.querySelector('.end-of')
+    const roundDom = document.querySelector('.round')
+    endOfDom.classList.toggle('hidden')
+    roundDom.classList.toggle('hidden')
+    if (winner === 'You') roundDom.textContent = winner + ' won the round!'
+    else roundDom.textContent = winner + ' won the round...'
+    
+    setInterval(() => {
+        endOfDom.classList.toggle('hidden')
+        roundDom.classList.toggle('hidden')
+    }, 2000)
+}
+
+function endGame() {
+    const endOfDom = document.querySelector('.end-of')
+    const gameDom = document.querySelector('.game')
+    endOfDom.classList.toggle('hidden')
+    gameDom.classList.toggle('hidden')
+    if (winner === 'You') gameDom.textContent = winner + ' won the game! Play again?'
+    else gameDom.textContent = winner + ' won the game... Try again?'
+
+    document.querySelector('.play-again').addEventListener('click', () => {
+        endOfDom.classList.toggle('hidden')
+        gameDom.classList.toggle('hidden')
+        startGame()
+    })
 }
 
 ///////START GAME////////
 const startGame = () => {
+    playerScore = 0
+    cpuScore = 0
+
     listenForDevMode()
-    setInterval(showPlayerTurnOnDom, 100)
+    setInterval(showTurnOnDom, 100)
     newHand()
     updateScores()
 
@@ -684,7 +716,7 @@ const startGame = () => {
                 // draw card
                 drawCard(playerHand)
                 playerTurn = false;
-                setTimeout(cpuTurn, 1500)
+                setTimeout(cpuTurn, Math.ceil((Math.random * 3000)))
             }
             else {
                 if (!areYouSure) {
@@ -697,7 +729,7 @@ const startGame = () => {
                     drawCard(playerHand)
                     areYouSure = false;
                     playerTurn = false
-                    setTimeout(cpuTurn, 1500)
+                    setTimeout(cpuTurn, Math.ceil((Math.random * 3000)))
                 }
             }
         }

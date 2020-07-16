@@ -133,16 +133,30 @@ img {
 }
 
 .end-of {
-    position: relative;
-    top: -15vh;
-    width: 20vw;
+    position: absolute;
+    z-index: 2;
+    top: 40vh;
+    left: 35vw;
+    width: 30vw;
     margin: auto;
     font-size: xx-large;
+    padding: 100px;
     padding-top: 50px;
-    border: 2px solid #00eaff;
+    border: 5px solid #00eaff;
     border-radius: 20px;
     padding: 10px;
-    z-index: 1;
+    background-color: black;
+    opacity: 0.9;
+}
+
+.end-of p {
+    color: #00eaff;
+    text-align: center;
+}
+
+.end-of p button {
+    background-color: greenyellow;
+    color: black;
 }
 
 .color-picker {
