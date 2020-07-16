@@ -612,7 +612,7 @@ const startGame = () => {
             }
             else {
                 if (!areYouSure) {
-                    alert("You sure, bro?")
+                    // alert("You sure, bro?")
                     // TODO: wiggle a playable card or something
                     areYouSure = true
                 }

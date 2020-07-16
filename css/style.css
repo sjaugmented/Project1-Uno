@@ -62,7 +62,7 @@ body {
 img {
     width: 100px;
     margin-left: -28px;
-    border-radius: 0px;
+    border-radius: 10px;
     /* background: #00628d; */
     box-shadow:  -7px -7px 14px #00405c
 }
@@ -128,3 +128,44 @@ img {
     padding: 10px;
     z-index: 1;
 }
+
+.color-picker {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    width: 60vw;
+    margin: auto;
+    margin-top: 20px;
+    text-align: center;
+    opacity: 0;
+}
+
+.color-picker p {
+    color: rgb(134, 174, 204);
+    font-size: large;
+}
+
+button {
+    height: 3vh;
+    width: 10vw;
+    color: white;
+}
+
+.red {
+    background-color: red;
+}
+
+.green {
+    background-color: green;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.yellow {
+    background-color: yellow;
+    color: black;
+}
+
