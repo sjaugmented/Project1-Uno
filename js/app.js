@@ -124,7 +124,7 @@ function dealCards() {
 
         // put cards on the DOM
         const cpuCard = document.createElement('img')
-        cpuCard.setAttribute('src', '/images/back.png')
+        cpuCard.setAttribute('src', 'images/back.png')
         cpuCard.setAttribute('class', 'cpu')
         cpuHandDom.appendChild(cpuCard)
 
@@ -548,7 +548,7 @@ function cpuTurn() {
 
     function chooseColorAfterWild() {
         console.log('cpu picking new color') // TODO: remove
-        const colors = ['red', 'green', 'blue', 'yellow']
+        const colors = ['rgb(255, 6, 0)', 'rgb(0, 170, 69)', 'rgb(0, 150, 224)', 'rgb(255, 222, 0)']
         const colorsInHand = [0, 0, 0, 0]
 
         // cpu checks how many of each color it has
