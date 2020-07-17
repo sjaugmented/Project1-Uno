@@ -35,6 +35,8 @@ const winGameFX = new Audio('audio/winGame.wav')
 const loseFX = new Audio('audio/lose.wav')
 const plusCardFX = new Audio('audio/plusCard.wav')
 const unoFX = new Audio('audio/uno.wav')
+const colorButton = new Audio('audio/colorButton.wav')
+const playAgain = new Audio('audio/playAgain.wav')
 
 class Card {
     constructor(rgb, value, points, changeTurn, drawValue, imgSrc) {
@@ -638,6 +640,7 @@ function showColorPicker() {
 
 function chooseColor(className) {
     //assign the color to the wild on top of the play pile
+    colorButton.play()
     playPile[playPile.length - 1].color = className
 
     // hide the color picker
@@ -680,6 +683,7 @@ function endGame(winner) {
     playerTurn = true
 
     document.querySelector('.play-again').addEventListener('click', () => {
+        playAgain.play()
         endOfGameDom.classList.add('hidden')
         startGame()
     })
