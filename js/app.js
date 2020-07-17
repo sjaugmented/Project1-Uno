@@ -1,6 +1,6 @@
 console.log('uno!')
 
-// global variables - hands, scores, piles
+// global DOM variables
 const cpuHandDom = document.querySelector('.cpu-hand')
 const playerHandDom = document.querySelector('.player-hand')
 
@@ -13,20 +13,21 @@ const drawPileDom = document.querySelector('.draw-pile')
 const playerUno = document.querySelector('.player-animation')
 const cpuUno = document.querySelector('.cpu-animation')
 
+// hand arrays
 const cpuHand = []
 const playerHand = []
-let playPile;
 
-let cpuScore = 0;
-let playerScore = 0;
+const deck = []
+let playPile
+let cpuScore = 0
+let playerScore = 0
 
+// variables to control gameplay
 let playerTurn = true
-
 let cpuDelay = Math.floor((Math.random() * cpuHand.length * 200) + 1500)
-
 let gameOver = 100
 
-// audio objects
+// #region audio
 const shuffleFX = new Audio('audio/shuffle.wav')
 const playCardFX = new Audio('audio/playCardNew.wav')
 const drawCardFX = new Audio('audio/drawCard.wav')
@@ -37,7 +38,9 @@ const plusCardFX = new Audio('audio/plusCard.wav')
 const unoFX = new Audio('audio/uno.wav')
 const colorButton = new Audio('audio/colorButton.wav')
 const playAgain = new Audio('audio/playAgain.wav')
+//#endregion
 
+// #region cards and deck management
 class Card {
     constructor(rgb, value, points, changeTurn, drawValue, imgSrc) {
         this.color = rgb
@@ -50,7 +53,7 @@ class Card {
     }
 }
 
-function createCard(rgb, color) {
+const createCard = (rgb, color) => {
     for (let n = 0; n <= 14; n++) {
         // number cards
         if (n === 0) {
@@ -78,9 +81,6 @@ function createCard(rgb, color) {
         }
     }
 }
-
-
-const deck = []
 
 const createDeck = () => {
     // destroy previous deck
