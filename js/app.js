@@ -1,6 +1,6 @@
 console.log('uno!')
 
-// global DOM variables
+//#region  // DOM AND GLOBAL VARIABLES
 const cpuHandDom = document.querySelector('.cpu-hand')
 const playerHandDom = document.querySelector('.player-hand')
 
@@ -26,6 +26,7 @@ let playerScore = 0
 let playerTurn = true
 let cpuDelay = Math.floor((Math.random() * cpuHand.length * 200) + 1500)
 let gameOver = 100
+//#endregion
 
 // #region AUDIO
 const shuffleFX = new Audio('audio/shuffle.wav')
@@ -120,7 +121,7 @@ const shuffleDeck = (deck) => {
 }
 //#endregion
 
-// #region BASIC FUNCTIONALITY 
+// #region GAME BEHAVIOURS
 const dealCards = () => {
     for (let i = 0; i < 7; i++) {
         // deal cards into cpu/player arrays
@@ -179,6 +180,16 @@ const newHand = () => {
     dealCards()
     // set down first play card that isn't an action card
     startPlayPile()
+}
+
+const updatePlayPileDom = () => {
+    playPileDom.innerHTML = ''
+
+    // add played card to playPile
+    const newCardImg = document.createElement('img')
+    const imgSrc = playPile[playPile.length - 1].src
+    newCardImg.setAttribute('src', imgSrc)
+    playPileDom.appendChild(newCardImg)
 }
 
 const updateHand = (handToUpdate) => {
@@ -258,12 +269,94 @@ const animateDrawCard = (player) => {
         setTimeout(() => {
             drawCardEl.classList.add('hidden')
             drawCardEl.classList.remove(playerClass)
-        }, 400)
-    }, 10)
+            clearInterval()
+        }, 500)
+    }, 30)
+}
+
+const showUno = (unoHand) => {
+    // remove hidden class from player-uno div
+    unoHand.classList.remove('hidden')
+    unoFX.play()
+    console.log('removed HIDDEN from', unoHand)
+
+    // add shout class
+    setTimeout(() => {
+        unoHand.classList.add('shout')
+        console.log('added SHOUT to', unoHand)
+        //setTimeout = after x seconds remove shout
+        setTimeout(() => {
+            unoHand.classList.remove('shout')
+            console.log('removed SHOUT from', unoHand)
+
+            setTimeout(() => {
+                unoHand.classList.add('hidden')
+                console.log('added HIDDEN to', unoHand)
+            }, 1000)
+        }, 1000)
+    }, 10) 
+}
+
+const showColorPicker = () => {
+    // show the color picker
+    const colorPicker = document.querySelector('.color-picker')
+    colorPicker.style.opacity = 1
+
+    //assign eventHandler's to buttons
+    document.querySelector('.red').addEventListener('click', (e) => {
+        // pass thru the class name for color
+        chooseColor('rgb(255, 6, 0)')
+    })
+    document.querySelector('.green').addEventListener('click', (e) => {
+        // pass thru the class name for color
+        chooseColor('rgb(0, 170, 69)')
+    })
+    document.querySelector('.blue').addEventListener('click', (e) => {
+        // pass thru the class name for color
+        chooseColor('rgb(0, 150, 224)')
+    })
+    document.querySelector('.yellow').addEventListener('click', (e) => {
+        // pass thru the class name for color
+        chooseColor('rgb(255, 222, 0)')
+    })
+}
+
+const chooseColor = (rgb) => {
+    //assign the color to the wild on top of the play pile
+    colorButton.play()
+    playPile[playPile.length - 1].color = rgb
+
+    // hide the color picker
+    const colorPicker = document.querySelector('.color-picker')
+    colorPicker.style.opacity = 0
+
+    skipOrEndTurn()
+}
+
+const skipOrEndTurn = () => {
+    // check if changeTurn or skip
+    if (playPile[playPile.length - 1].changeTurn) {
+        playerTurn = false
+
+        // cpu's turn
+        setTimeout(cpuTurn, cpuDelay)
+    }
+}
+
+// update player names with whose turn it is
+const showTurnOnDom = () => {
+    if (playerTurn) {
+        document.querySelector('.player-score-title').style.color = 'rgb(100, 150, 150)'
+        document.querySelector('.cpu-score-title').style.color = 'rgb(6, 37, 62)'
+    }
+    else {
+        document.querySelector('.player-score-title').style.color = 'rgb(6, 37, 62)'
+        document.querySelector('.cpu-score-title').style.color = 'rgb(100, 150, 150)'
+    }
 }
 //#endregion
 
-//#region END OF ROUND FUNCTIONS
+//#region END OF ROUND/GAME FUNCTIONS
 const tallyPoints = (loserHand) => {
     let points = 0
 
@@ -304,10 +397,12 @@ const checkForWinner = () => {
             endRound(cpuHand)
         }
 
-        setInterval(() => {
+        setTimeout(() => {
             newHand()
             // loser goes first
             playerTurn = !playerTurn
+            
+            if (!playerTurn) cpuTurn()
         }, 2000)
     }
         
@@ -329,7 +424,7 @@ const endRound = (winner) => {
     else roundDom.textContent = 'CPU won the round...'
     
     // hide end of round element after 2 seconds
-    setInterval(() => {
+    setTimeout(() => {
         endOfroundDom.classList.add('hidden')
     }, 2000)
 }
@@ -364,28 +459,8 @@ const endGame = () => {
 }
 //#endregion
 
-// update player names with whose turn it is
-const showTurnOnDom = () => {
-    if (playerTurn) {
-        document.querySelector('.player-score-title').style.color = 'rgb(100, 150, 150)'
-        document.querySelector('.cpu-score-title').style.color = 'rgb(6, 37, 62)'
-    }
-    else {
-        document.querySelector('.player-score-title').style.color = 'rgb(6, 37, 62)'
-        document.querySelector('.cpu-score-title').style.color = 'rgb(100, 150, 150)'
-    }
-}
-
-////////CPU LOGIC////////
-const checkCPUDraw = () => {
-    // make sure last card played is from the player
-    // if (playPile[playPile.length - 1].playedByPlayer === true && playPile[playPile.length - 1].drawValue > 0) {
-    //     // add however many cards based on drawValue of last played card
-    //     for (let i = 0; i < playPile[playPile.length - 1].drawValue; i++) {
-    //         drawCard(cpuHand)
-    //     }
-    // }
-
+//#region ////////CPU LOGIC////////
+const letCpuDrawCards = () => {
     if (playPile[playPile.length - 1].drawValue > 0) {
         // add however many cards based on drawValue of last played card
         for (let i = 0; i < playPile[playPile.length - 1].drawValue; i++) {
@@ -422,72 +497,44 @@ const cpuTurn = () => {
             console.log('cpu has', playable.length, 'playable cards')
             
             chosenCard = runStrategist(playable)
-            playCPUCard(chosenCard)
-            // let highCardIndex, lowCardIndex
-            
-            // // run strategist to determine strategy
-            // let strategist = Math.random()
-            // console.log('strategist:', strategist) // TODO: remove
-            // // if strategist > 0.5 || playerHand <= 3
-            // if (strategist > 0.7 || playerHand.length < 3 || cpuHand.length > playerHand.length * 2) {
-            //     // prioritize action/high point cards
-            //     let highestValue = 0
-
-            //     for (let i = 0; i < playable.length; i++){
-            //         if (playable[i].value > highestValue) {
-            //             highestValue = playable[i].value
-            //             highCardIndex = i
-            //         }
-            //     }
-
-            //     // play card determined by strategist
-            //     // remove card from playable
-            //     chosenCard = playable.splice(highCardIndex, 1)
-
-            //     // return playable to cpuHand
-            //     if (playable.length > 0) {
-            //         for (const card of playable) {
-            //             cpuHand.push(card)
-            //         }
-            //     }
-
-            //     console.log('cpu chose high card') // TODO: remove
-            //     console.log(chosenCard[0])  // TODO: remove
-
-            //     playCPUCard(chosenCard[0])   
-
-            // }
-
-            // else {
-            //     // else prioritize color || number cards
-            //     let lowestValue = 9
-
-            //     for (let i = 0; i < playable.length; i++){
-            //         if (playable[i].value < lowestValue) {
-            //             lowestValue = playable[i].value
-            //             lowCardIndex = i
-            //         }
-            //     }
-
-            //     // play card determined by strategist
-            //     // remove card from playable
-            //     chosenCard = playable.splice(lowCardIndex, 1)
-
-            //     // return playable to cpuHand
-            //     if (playable.length > 0) {
-            //         for (const card of playable) {
-            //             cpuHand.push(card)
-            //         }
-            //     }
-
-            //     console.log('cpu chose low card') // TODO: remove
-            //     console.log(chosenCard[0])  // TODO: remove
-
-            //     playCPUCard(chosenCard[0])   
-            // }            
+            playCPUCard(chosenCard)            
         }
     }
+//#region CPU SPECIFIC FUNCTIONS
+    function determinePlayableCards() {
+        const playableCards = []
+        
+        // check if playPile is wild
+        if (playPile[playPile.length - 1].color === 'any') {
+            // all cards playable
+            console.log('last played card is wild') // TODO: remove
+            
+            // OF array not IN object!
+            for (const card of cpuHand) {
+                playableCards.push(card)
+            }
 
+            cpuHand.length = 0
+
+            console.log('playable cards')
+            console.log(playableCards) // TODO: remove
+        }
+        // if not wild, compare cpuHand to top of play pile
+        else {
+            console.log('last card played:') // TODO: remove
+            console.log(playPile[playPile.length - 1])
+            for (let i = 0; i < cpuHand.length; i++) {
+                if (cpuHand[i].color === playPile[playPile.length - 1].color || cpuHand[i].value === playPile[playPile.length - 1].value || cpuHand[i].color === 'any') {
+                    let validCard = cpuHand.splice(i, 1)
+                    playableCards.push(validCard[0])
+                }
+            }
+            console.log('playable cards:')
+            console.log(playableCards) // TODO: remove
+        }
+        return playableCards
+}
+    
     function runStrategist(playable) {
         let highCardIndex, lowCardIndex
             
@@ -566,12 +613,12 @@ const cpuTurn = () => {
         setTimeout(() => {
             playPile.push(chosenCard)
             // update playPileDom
-            playPileDom.innerHTML = ''
-            const newCardImg = document.createElement('img')
-            const imgSrc = playPile[playPile.length - 1].src
-
-            newCardImg.setAttribute('src', imgSrc)
-            playPileDom.appendChild(newCardImg)
+            updatePlayPileDom()
+            // playPileDom.innerHTML = ''
+            // const newCardImg = document.createElement('img')
+            // const imgSrc = playPile[playPile.length - 1].src
+            // newCardImg.setAttribute('src', imgSrc)
+            // playPileDom.appendChild(newCardImg)
 
 
             // check if cpu played wild
@@ -605,27 +652,43 @@ const cpuTurn = () => {
             // if cpu played a draw card
             if (chosenCard.drawValue > 0) {
                 // alert('cpu played a +' + chosenCard.drawValue + ' card!')
-                console.log('cpu played a +' + chosenCard.drawValue + ' card!')
+                console.log('cpu played a +' + chosenCard.drawValue + ' card!') // TODO: remove
                 hitWithDrawCard()
                 setTimeout(() => {
                     for (let i = 0; i < chosenCard.drawValue; i++) {
                         drawCard(playerHand)
                     }
-                    if (chosenCard.changeTurn) {
-                        // if changeTurn, playerTurn = true
-                        console.log('cpu has finished its turn') // TODO: remove
-                        playerTurn = true
-                    }
-                    else {
-                        // else cpuTurn() again
-                        console.log('cpu goes again') // TODO: remove
-                        setTimeout(cpuTurn, cpuDelay)
-                    }
+                    checkChangeTurn()
+                    // if (chosenCard.changeTurn) {
+                    //     // if changeTurn, playerTurn = true
+                    //     console.log('cpu has finished its turn') // TODO: remove
+                    //     playerTurn = true
+                    // }
+                    // else {
+                    //     // else cpuTurn() again
+                    //     console.log('cpu goes again') // TODO: remove
+                    //     setTimeout(cpuTurn, cpuDelay)
+                    // }
                 },1000)
             }
 
             // determine changeTurn based on played card
-            else if (chosenCard.changeTurn) {
+            checkChangeTurn()
+            // else if (chosenCard.changeTurn) {
+            //     // if changeTurn, playerTurn = true
+            //     console.log('cpu has finished its turn') // TODO: remove
+            //     playerTurn = true
+            // }
+            // else {
+            //     // else cpuTurn() again
+            //     console.log('cpu goes again') // TODO: remove
+            //     setTimeout(cpuTurn, cpuDelay)
+            // }
+        }, 200)
+        
+
+        function checkChangeTurn() {
+            if (chosenCard.changeTurn) {
                 // if changeTurn, playerTurn = true
                 console.log('cpu has finished its turn') // TODO: remove
                 playerTurn = true
@@ -634,44 +697,8 @@ const cpuTurn = () => {
                 // else cpuTurn() again
                 console.log('cpu goes again') // TODO: remove
                 setTimeout(cpuTurn, cpuDelay)
-
             }
-        }, 200)
-        
-    }
-
-    function determinePlayableCards() {
-        const playableCards = []
-        
-        // check if playPile is wild
-        if (playPile[playPile.length - 1].color === 'any') {
-            // all cards playable
-            console.log('last played card is wild') // TODO: remove
-            
-            // OF array not IN object!
-            for (const card of cpuHand) {
-                playableCards.push(card)
-            }
-
-            cpuHand.length = 0
-
-            console.log('playable cards')
-            console.log(playableCards) // TODO: remove
         }
-        // if not wild, compare cpuHand to top of play pile
-        else {
-            console.log('last card played:') // TODO: remove
-            console.log(playPile[playPile.length - 1])
-            for (let i = 0; i < cpuHand.length; i++) {
-                if (cpuHand[i].color === playPile[playPile.length - 1].color || cpuHand[i].value === playPile[playPile.length - 1].value || cpuHand[i].color === 'any') {
-                    let validCard = cpuHand.splice(i, 1)
-                    playableCards.push(validCard[0])
-                }
-            }
-            console.log('playable cards:')
-            console.log(playableCards) // TODO: remove
-        }
-        return playableCards
     }
 
     function chooseColorAfterWild() {
@@ -689,47 +716,14 @@ const cpuTurn = () => {
 
         // find the index of the max value
         let indexOfMax = colorsInHand.indexOf(Math.max(...colorsInHand))
-        // let colorCount = 0
-        // for (let i = 0; i < colorsInHand.length; i++) {
-        //     if (colorsInHand[i] > colorCount) {
-        //         colorCount = colorsInHand[i]
-        //         indexOfMax = i
-        //     } 
-        // }
-
-        console.log('cpu picked', colors[indexOfMax]) // TODO: remove
 
         // style the wild card and it's color
         const wildCardDom = playPileDom.childNodes[0]
         wildCardDom.style.border = '5px solid ' + colors[indexOfMax]
         wildCardDom.style.width = '105px'
         playPile[playPile.length - 1].color = colors[indexOfMax]
-
-        console.log('cpu added border to wild card') // TODO: remove
     }
-}
-
-const showUno = (unoHand) => {
-    // remove hidden class from player-uno div
-    unoHand.classList.remove('hidden')
-    unoFX.play()
-    console.log('removed HIDDEN from', unoHand)
-
-    // add shout class
-    setTimeout(() => {
-        unoHand.classList.add('shout')
-        console.log('added SHOUT to', unoHand)
-        //setTimeout = after x seconds remove shout
-        setTimeout(() => {
-            unoHand.classList.remove('shout')
-            console.log('removed SHOUT from', unoHand)
-
-            setTimeout(() => {
-                unoHand.classList.add('hidden')
-                console.log('added HIDDEN to', unoHand)
-            }, 1000)
-        }, 1000)
-    }, 10) 
+    //#endregion
 }
 
 const hitWithDrawCard = () => {
@@ -739,54 +733,18 @@ const hitWithDrawCard = () => {
         playPileDom.classList.remove('shout')
     }, 1000)
 }
+//#endregion
 
-const showColorPicker = () => {
-    // show the color picker
-    const colorPicker = document.querySelector('.color-picker')
-    colorPicker.style.opacity = 1
+function playPlayerCard(index) {
+    let cardToPlay = playerHand.splice(index, 1)
+    cardToPlay[0].playedByPlayer = true
+    playPile.push(cardToPlay[0])
 
-    //assign eventHandler's to buttons
-    document.querySelector('.red').addEventListener('click', (e) => {
-        // pass thru the class name for color
-        chooseColor('rgb(255, 6, 0)')
-    })
-    document.querySelector('.green').addEventListener('click', (e) => {
-        // pass thru the class name for color
-        chooseColor('rgb(0, 170, 69)')
-    })
-    document.querySelector('.blue').addEventListener('click', (e) => {
-        // pass thru the class name for color
-        chooseColor('rgb(0, 150, 224)')
-    })
-    document.querySelector('.yellow').addEventListener('click', (e) => {
-        // pass thru the class name for color
-        chooseColor('rgb(255, 222, 0)')
-    })
+    // clear the playPile
+    updatePlayPileDom()
 }
 
-const chooseColor = (rgb) => {
-    //assign the color to the wild on top of the play pile
-    colorButton.play()
-    playPile[playPile.length - 1].color = rgb
-
-    // hide the color picker
-    const colorPicker = document.querySelector('.color-picker')
-    colorPicker.style.opacity = 0
-
-    skipOrEndTurn()
-}
-
-const skipOrEndTurn = () => {
-    // check if changeTurn or skip
-    if (playPile[playPile.length - 1].changeTurn) {
-        playerTurn = false
-
-        // cpu's turn
-        setTimeout(cpuTurn, cpuDelay)
-    }
-}
-
-///////START GAME////////
+//#region ///////MAIN GAME FUNCTION////////
 const startGame = () => {
     playerScore = 0
     cpuScore = 0
@@ -816,7 +774,6 @@ const startGame = () => {
                 playCardFX.play()
                 event.target.classList.add('play-card')
                 console.log(event.target)
-                
 
                 setTimeout(() => {
                     // set topOfPlayPile to target.src
@@ -825,7 +782,7 @@ const startGame = () => {
 
 
                     // invoke cpuTurn to add cards if there are any to add
-                    checkCPUDraw()
+                    letCpuDrawCards()
                     
                     // check playerHand length and update DOM
                     if (playerHand.length > 1) {
@@ -833,7 +790,6 @@ const startGame = () => {
                     }
                     else if (playerHand.length === 1) {
                         updateHand(playerHand)
-                        // TODO: showUno()
                         showUno(playerUno)
                     }
                     else {
@@ -856,7 +812,7 @@ const startGame = () => {
                     }
 
                     skipOrEndTurn();
-                }, 800)
+                }, 1000)
                 
             }
         }
@@ -866,55 +822,13 @@ const startGame = () => {
 
     drawPileDom.addEventListener('click', () => {
         if (playerTurn) {
-            let anythingPlayable;
-
-            // check if anything is playable in playerHand
-            for (let i = 0; i < playerHand.length; i++) {
-                if (playerHand[i].color === playPile[playPile.length - 1].color || playerHand[i].value === playPile[playPile.length - 1].value || playerHand[i].color === 'any' || playPile[playPile.length - 1].color === 'any') {
-                    anythingPlayable = true;
-                    break
-                }
-                else anythingPlayable = false // TODO: remove - probably don't need this
-            }
-
-            if (!anythingPlayable) {
-                // draw card
-                drawCard(playerHand)
-                playerTurn = false;
-                setTimeout(cpuTurn, cpuDelay)
-            }
-            else {
-                if (!areYouSure) {
-                    // alert("You sure, bro?")
-                    // TODO: wiggle a playable card or something
-                    areYouSure = true
-                }
-                else {
-                    // draw card
-                    drawCard(playerHand)
-                    areYouSure = false;
-                    playerTurn = false
-                    setTimeout(cpuTurn, cpuDelay)
-                }
-            }
+            drawCard(playerHand)
+            playerTurn = false;
+            setTimeout(cpuTurn, cpuDelay)
         }
     })
 }
-
-function playPlayerCard(index) {
-    let cardToPlay = playerHand.splice(index, 1)
-    cardToPlay[0].playedByPlayer = true
-    playPile.push(cardToPlay[0])
-
-    // clear the playPile
-    playPileDom.innerHTML = ''
-
-    // add played card to playPile
-    const newCard = document.createElement('img')
-    const imgSrc = playPile[playPile.length - 1].src
-    newCard.setAttribute('src', imgSrc)
-    playPileDom.appendChild(newCard)
-}
+//#endregion
 
 function listenForDevMode() {
     document.addEventListener('keydown', event => {
