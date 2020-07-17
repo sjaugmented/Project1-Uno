@@ -8,9 +8,9 @@
 html {
   font-size: 62.5%;
 }
+
 body {
   box-sizing: border-box;
-  /* background-color: rgb(38, 94, 136); */
   background-image: linear-gradient(to bottom right, rgb(46, 118, 172), rgb(15, 66, 87));
   background-size: 100vw 100vh;
   width: 100vw;
@@ -21,21 +21,19 @@ body {
   font-family: 'Avenir Next'
 }
 
-.cpu-hand {
-    display: -webkit-box;   /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-    display: -ms-flexbox;  /* TWEENER - IE 10 */
-    display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+.cpu-box {
     display: flex;         /* NEW, Spec - Firefox, Chrome, Opera */
-    display: flex;
     justify-content: center;
     margin-bottom: 100px;
 }
 
+/* .cpu-hand {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 100px;
+} */
+
 .play-area {
-    display: -webkit-box;   /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-    display: -ms-flexbox;  /* TWEENER - IE 10 */
-    display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-    display: flex;         /* NEW, Spec - Firefox, Chrome, Opera */
     display: flex;
     justify-content: space-evenly;
 }
@@ -45,10 +43,6 @@ body {
 }
 
 .score {
-    display: -webkit-box;   /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-    display: -ms-flexbox;  /* TWEENER - IE 10 */
-    display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-    display: flex;         /* NEW, Spec - Firefox, Chrome, Opera */
     display: flex;
     flex-direction: column;
     margin: auto 0;
@@ -56,28 +50,22 @@ body {
     font-size: x-large;
 }
 
-#cpu-score {
-    /* color: rgb(121, 2, 2); */
-}
-
 #seperator {
     margin: 10px 0;
     border: 2px solid rgb(8, 81, 140);
 }
 
-#player-score {
-    /* color: rgb(0, 140, 0); */
-}
-
-.player-hand {
-    display: -webkit-box;   /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-    display: -ms-flexbox;  /* TWEENER - IE 10 */
-    display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-    display: flex;         /* NEW, Spec - Firefox, Chrome, Opera */
+.player-box {
     display: flex;
     justify-content: center;
     margin-top: 100px;
 }
+
+/* .player-hand {
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+} */
 
 img {
     width: 100px;
@@ -88,12 +76,8 @@ img {
 }
 
 .player-hand img:hover {
-    /* transform: translateY(-200px); */
-    /* transition: all 0.2s ease-in-out; */
     transform: scale(1.05) translateY(-8px);
     transition: all 0.1s ease-in-out;
-    /* box-shadow:  -29px 29px 58px #008ab4, 
-             29px -29px 58px #00eaff; */
     cursor: pointer;
   }
 
