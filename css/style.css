@@ -102,12 +102,12 @@ img {
 }
 
 .player-draw {
-    transform: translateY(250px) translateX(-100px);
+    transform: translateY(260px) translateX(-100px);
     transition: all 0.2s ease-in-out;
 }
 
 .cpu-draw {
-    transform: translateY(-250px) translateX(-100px);
+    transform: translateY(-260px) translateX(-100px);
     transition: all 0.2s ease-in-out;
 }
 
@@ -126,13 +126,13 @@ img {
 }
 
 .play-card {
-    transform: translateY(-250px);
-    transition: all 0.1s ease-in
+    transform: translateY(-260px);
+    transition: 0.3s ease;
 }
 
 .cpu-play-card {
-    transform: translateY(250px);
-    transition: all 0.1s ease-in
+    transform: translateY(260px);
+    transition: all 0.1s ease-in;
 }
 
 .hidden {

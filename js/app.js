@@ -254,7 +254,9 @@ const drawCard = (handGetsCard) => {
         
     }
     drawCardFX.play()
-    updateHand(handGetsCard)
+    setTimeout(() => {
+        updateHand(handGetsCard)
+    }, 500)
 }
 
 const animateDrawCard = (player) => {
@@ -396,14 +398,6 @@ const checkForWinner = () => {
             loseFX.play()
             endRound(cpuHand)
         }
-
-        setTimeout(() => {
-            newHand()
-            // loser goes first
-            playerTurn = !playerTurn
-            
-            if (!playerTurn) cpuTurn()
-        }, 2000)
     }
         
     else {
@@ -414,6 +408,8 @@ const checkForWinner = () => {
 
 const endRound = (winner) => {
     console.log('round over') // TODO: remove
+    
+    playerTurn = !playerTurn
     
     const endOfroundDom = document.querySelector('.end-of-round')
     const roundDom = document.querySelector('.round')
@@ -426,7 +422,9 @@ const endRound = (winner) => {
     // hide end of round element after 2 seconds
     setTimeout(() => {
         endOfroundDom.classList.add('hidden')
-    }, 2000)
+        newHand()
+        if (!playerTurn) cpuTurn()
+    }, 3000)
 }
 
 const endGame = () => {
@@ -593,8 +591,6 @@ const cpuTurn = () => {
             }
 
             console.log('cpu chose low card') // TODO: remove
-            console.log(chosenCard[0])  // TODO: remove
-
             return chosenCard[0]   
         }
     }
@@ -614,12 +610,6 @@ const cpuTurn = () => {
             playPile.push(chosenCard)
             // update playPileDom
             updatePlayPileDom()
-            // playPileDom.innerHTML = ''
-            // const newCardImg = document.createElement('img')
-            // const imgSrc = playPile[playPile.length - 1].src
-            // newCardImg.setAttribute('src', imgSrc)
-            // playPileDom.appendChild(newCardImg)
-
 
             // check if cpu played wild
             if (playPile[playPile.length - 1].color === 'any' && playPile[playPile.length - 1].drawValue === 0) {
@@ -641,11 +631,7 @@ const cpuTurn = () => {
                 // tally points & update scores
                 tallyPoints(playerHand)
                 updateScores()
-                //alert("CPU won the round!") // TODO: make element rather than alert
-                // loseFX.play()
-                // endRound('CPU')
 
-                // next hand if both scores < gameOver
                 checkForWinner()
             }
 
@@ -659,31 +645,9 @@ const cpuTurn = () => {
                         drawCard(playerHand)
                     }
                     checkChangeTurn()
-                    // if (chosenCard.changeTurn) {
-                    //     // if changeTurn, playerTurn = true
-                    //     console.log('cpu has finished its turn') // TODO: remove
-                    //     playerTurn = true
-                    // }
-                    // else {
-                    //     // else cpuTurn() again
-                    //     console.log('cpu goes again') // TODO: remove
-                    //     setTimeout(cpuTurn, cpuDelay)
-                    // }
                 },1000)
             }
-
-            // determine changeTurn based on played card
-            checkChangeTurn()
-            // else if (chosenCard.changeTurn) {
-            //     // if changeTurn, playerTurn = true
-            //     console.log('cpu has finished its turn') // TODO: remove
-            //     playerTurn = true
-            // }
-            // else {
-            //     // else cpuTurn() again
-            //     console.log('cpu goes again') // TODO: remove
-            //     setTimeout(cpuTurn, cpuDelay)
-            // }
+            else checkChangeTurn()
         }, 200)
         
 
@@ -773,7 +737,7 @@ const startGame = () => {
                 // animate clicked card
                 playCardFX.play()
                 event.target.classList.add('play-card')
-                console.log(event.target)
+                console.log('you played', event.target) // TODO: remove
 
                 setTimeout(() => {
                     // set topOfPlayPile to target.src
@@ -796,9 +760,6 @@ const startGame = () => {
                         // tally points
                         tallyPoints(cpuHand)
                         updateScores()
-                        //alert("You won the round!")
-                        // winRoundFX.play()
-                        // endRound('You')
 
                         // next hand if both scores < gameOver
                         checkForWinner()
