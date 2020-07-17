@@ -4,7 +4,10 @@ SEI-629 Project 1 - HTML, CSS, JS
 <img src="uno-mockup.png">
 <br>
 # Welcome to UNO!
+<br>
+[Check it out.](https://sjaugmented.github.io/Project1-Uno/)
 
+**User Story
 The game will start automatically upon loading.
 
 The player and the CPU will each begin with 7 cards, and a number card will begin the Play Pile. The player will go first. The player can either click on a card of matching value or color to play it, play an Action Card (Reverse, Skip, Draw 2, Draw 4, Wild), or if no playable cards are available, click on the Draw Pile for a new card and forfeit their turn.
