@@ -95,6 +95,22 @@ img {
     transition: all 0.1s ease-in-out;
 }
 
+#draw-card {
+    position: absolute;
+    right: 19vw;
+    z-index: 2;
+}
+
+.player-draw {
+    transform: translateY(250px) translateX(-200px);
+    transition: all 0.2s ease-in-out;
+}
+
+.cpu-draw {
+    transform: translateY(-250px) translateX(-200px);
+    transition: all 0.2s ease-in-out;
+}
+
 .player-animation {
     position: absolute;
     z-index: 2;
@@ -162,9 +178,9 @@ img {
 .end-of-game {
     position: absolute;
     z-index: 2;
-    top: 40vh;
-    left: 35vw;
-    width: 30vw;
+    top: 37vh;
+    left: 30vw;
+    width: 40vw;
     margin: auto;
     font-size: xx-large;
     padding: 100px;
@@ -189,7 +205,7 @@ img {
 .end-of-game button {
     background-color: greenyellow;
     color: black;
-    margin-left: 9vw;
+    margin-left: 14vw;
     margin-top: 10px;
     
 }
@@ -252,7 +268,7 @@ button:hover {
     box-shadow: none;
 }
 /* for landscape iphone X */
-@media only screen and (max-width: 850) {
+@media only screen and (max-width: 812) {
     body {
         margin-top: -50px;
         margin-bottom: 0px;
