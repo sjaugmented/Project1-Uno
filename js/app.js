@@ -37,8 +37,8 @@ const plusCardFX = new Audio('audio/plusCard.wav')
 const unoFX = new Audio('audio/uno.wav')
 
 class Card {
-    constructor(color, value, points, changeTurn, drawValue, imgSrc) {
-        this.color = color
+    constructor(rgb, value, points, changeTurn, drawValue, imgSrc) {
+        this.color = rgb
         this.value = value
         this.points = points
         this.changeTurn = changeTurn
@@ -48,25 +48,25 @@ class Card {
     }
 }
 
-function createCard(color) {
+function createCard(rgb, color) {
     for (let n = 0; n <= 14; n++) {
         // number cards
         if (n === 0) {
-            deck.push(new Card(color, n, n, true, 0, 'images/' + color + n + '.png'))
+            deck.push(new Card(rgb, n, n, true, 0, 'images/' + color + n + '.png'))
         }
         else if (n > 0 && n <= 9) {
-            deck.push(new Card(color, n, n, true, 0, 'images/' + color + n + '.png'))
-            deck.push(new Card(color, n, n, true, 0, 'images/' + color + n + '.png'))
+            deck.push(new Card(rgb, n, n, true, 0, 'images/' + color + n + '.png'))
+            deck.push(new Card(rgb, n, n, true, 0, 'images/' + color + n + '.png'))
         }
         // reverse/skip
         else if (n === 10 || n === 11) {
-            deck.push(new Card(color, n, 20, false, 0, 'images/' + color + n + '.png'))
-            deck.push(new Card(color, n, 20, false, 0, 'images/' + color + n + '.png'))
+            deck.push(new Card(rgb, n, 20, false, 0, 'images/' + color + n + '.png'))
+            deck.push(new Card(rgb, n, 20, false, 0, 'images/' + color + n + '.png'))
         }
         // draw 2
         else if (n === 12) {
-            deck.push(new Card(color, n, 20, false, 2, 'images/' + color + n + '.png'))
-            deck.push(new Card(color, n, 20, false, 2, 'images/' + color + n + '.png'))
+            deck.push(new Card(rgb, n, 20, false, 2, 'images/' + color + n + '.png'))
+            deck.push(new Card(rgb, n, 20, false, 2, 'images/' + color + n + '.png'))
         }
         else if (n === 13) {
             deck.push(new Card('any', n, 50, true, 0, 'images/wild' + n + '.png'))
@@ -86,16 +86,16 @@ const createDeck = () => {
     // create new deck
     for (let i = 0; i <= 3; i++){
         if (i === 0) {
-            createCard('red')
+            createCard('rgb(255, 6, 0)', 'red')
         }
         else if (i === 1) {
-            createCard('green')
+            createCard('rgb(0, 170, 69)', 'green')
         }
         else if (i === 2) {
-            createCard('blue')
+            createCard('rgb(0, 150, 224)', 'blue')
         }
         else {
-            createCard('yellow')
+            createCard('rgb(255, 222, 0)', 'yellow')
         }
     }
 
