@@ -677,6 +677,7 @@ function endGame(winner) {
     endOfGameDom.classList.remove('hidden')
     if (winner === 'You') gameDom.textContent = 'You won the game! Play again?'
     else gameDom.textContent = 'CPU won the game... Try again?'
+    playerTurn = true
 
     document.querySelector('.play-again').addEventListener('click', () => {
         endOfGameDom.classList.add('hidden')
