@@ -422,16 +422,16 @@ const checkForWinner = () => {
 
 const showCpuCards = () => {
     cpuHandDom.innerHTML = ''
+    if (cpuHand.length > 1) {
+        for (let i = 0; i < cpuHand.length; i++) {
     
-    for (let i = 0; i < cpuHand.length; i++) {
-        // deal cards into cpu/player arrays
-
-        // put cards on the DOM
-        const cpuCard = document.createElement('img')
-        cpuCard.setAttribute('src', cpuHand[i].src)
-        cpuCard.setAttribute('class', 'cpu')
-        cpuHandDom.appendChild(cpuCard)
-    }
+            // turn the cards over
+            const cpuCard = document.createElement('img')
+            cpuCard.setAttribute('src', cpuHand[i].src)
+            cpuCard.setAttribute('class', 'cpu')
+            cpuHandDom.appendChild(cpuCard)
+        }
+    } 
 }
 
 const endRound = (winner) => {
