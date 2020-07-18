@@ -796,7 +796,7 @@ const startGame = () => {
 }
 //#endregion
 
-function listenForDevMode() {
+const listenForDevMode = () => {
     document.addEventListener('keydown', event => {
         const key = event.key.toLowerCase()
 
