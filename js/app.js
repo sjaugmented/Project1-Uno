@@ -829,7 +829,7 @@ const startGame = () => {
 const listenForDevMode = () => {
     document.addEventListener('keydown', event => {
         const key = event.key.toLowerCase()
-
+        console.log(key)
         if (key === 'p') {
             playerTurn = true;
             console.log('forced playerTurn', playerTurn)
