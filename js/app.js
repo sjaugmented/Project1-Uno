@@ -33,6 +33,7 @@ let gameOver = 100
 // #region AUDIO
 const shuffleFX = new Audio('audio/shuffle.wav')
 const playCardFX = new Audio('audio/playCardNew.wav')
+const playCardFX2 = new Audio('audio/playCard2.wav')
 const drawCardFX = new Audio('audio/drawCard.wav')
 const winRoundFX = new Audio('audio/winRound.wav')
 const winGameFX = new Audio('audio/winGame.wav')
@@ -41,6 +42,15 @@ const plusCardFX = new Audio('audio/plusCard.wav')
 const unoFX = new Audio('audio/uno.wav')
 const colorButton = new Audio('audio/colorButton.wav')
 const playAgain = new Audio('audio/playAgain.wav')
+
+const pickPlayCardSound = () => {
+    // const random = Math.random() * 10
+
+    // if (random > 6) playCardFX.play()
+    // else playCardFX2.play()
+
+    playCardFX2.play()
+}
 //#endregion
 
 // #region CARD AND DECK MANAGEMENT
@@ -410,10 +420,26 @@ const checkForWinner = () => {
     }
 }
 
+const showCpuCards = () => {
+    cpuHandDom.innerHTML = ''
+    
+    for (let i = 0; i < cpuHand.length; i++) {
+        // deal cards into cpu/player arrays
+
+        // put cards on the DOM
+        const cpuCard = document.createElement('img')
+        cpuCard.setAttribute('src', cpuHand[i].src)
+        cpuCard.setAttribute('class', 'cpu')
+        cpuHandDom.appendChild(cpuCard)
+    }
+}
+
 const endRound = (winner) => {
     console.log('round over') // TODO: remove
     gameOn = false;
     playerTurn = !playerTurn
+
+    showCpuCards()
     
     const endOfroundDom = document.querySelector('.end-of-round')
     const roundDom = document.querySelector('.round')
@@ -427,13 +453,17 @@ const endRound = (winner) => {
     setTimeout(() => {
         endOfroundDom.classList.add('hidden')
         newHand()
-        if (!playerTurn) playCPU()
+        setTimeout(() => {
+            if (!playerTurn) playCPU()
+        }, cpuDelay)
+        
     }, 3000)
 }
 
 const endGame = () => {
     console.log('game over') // TODO: remove
     gameOn = false;
+    showCpuCards()
     const endOfGameDom = document.querySelector('.end-of-game')
     const gameDom = document.querySelector('.game')
 
@@ -609,7 +639,7 @@ const playCPU = () => {
         const cpuDomCards = cpuHandDom.childNodes
         cpuDomCards[Math.floor(Math.random() * cpuDomCards.length)].classList.add('cpu-play-card')
         console.log('animating CPU card')
-        playCardFX.play()
+        pickPlayCardSound()
         
         setTimeout(() => {
             playPile.push(chosenCard)
@@ -740,7 +770,7 @@ const startGame = () => {
             if (playerHand[index].value === playPile[playPile.length - 1].value || playerHand[index].color === playPile[playPile.length - 1].color || playerHand[index].color === 'any' || playPile[playPile.length - 1].color === 'any') {     
                 
                 // animate clicked card
-                playCardFX.play()
+                pickPlayCardSound()
                 event.target.classList.add('play-card')
                 console.log('you played', event.target) // TODO: remove
 
