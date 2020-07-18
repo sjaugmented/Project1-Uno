@@ -25,6 +25,7 @@ let playerScore = 0
 // variables to control gameplay
 let playerTurn = true
 let gameOn = true
+let colorPickerIsOpen = false
 let cpuDelay = Math.floor((Math.random() * cpuHand.length * 200) + 1500)
 let gameOver = 100
 //#endregion
@@ -305,6 +306,7 @@ const showColorPicker = () => {
     // show the color picker
     const colorPicker = document.querySelector('.color-picker')
     colorPicker.style.opacity = 1
+    colorPickerIsOpen = true
 
     //assign eventHandler's to buttons
     document.querySelector('.red').addEventListener('click', (e) => {
@@ -333,7 +335,7 @@ const chooseColor = (rgb) => {
     // hide the color picker
     const colorPicker = document.querySelector('.color-picker')
     colorPicker.style.opacity = 0
-
+    colorPickerIsOpen = false
     skipOrEndTurn()
 }
 
@@ -343,7 +345,7 @@ const skipOrEndTurn = () => {
         playerTurn = false
 
         // cpu's turn
-        setTimeout(cpuTurn, cpuDelay)
+        setTimeout(playCPU, cpuDelay)
     }
 }
 
@@ -425,7 +427,7 @@ const endRound = (winner) => {
     setTimeout(() => {
         endOfroundDom.classList.add('hidden')
         newHand()
-        if (!playerTurn) cpuTurn()
+        if (!playerTurn) playCPU()
     }, 3000)
 }
 
@@ -467,11 +469,9 @@ const letCpuDrawCards = () => {
     }
 }
 
-const cpuTurn = () => {   
+const playCPU = () => {   
     if (!playerTurn && gameOn) {
         console.log('cpu beginning turn') // TODO: remove        
-
-        let chosenCard
         
         // create temp array of playable cards based on last card played
         const playable = determinePlayableCards()
@@ -494,7 +494,7 @@ const cpuTurn = () => {
         else if (playable.length > 1) {
             console.log('cpu has', playable.length, 'playable cards')
             
-            chosenCard = runStrategist(playable)
+            let chosenCard = runStrategist(playable)
             playCPUCard(chosenCard)            
         }
     }
@@ -531,7 +531,7 @@ const cpuTurn = () => {
         console.log('last card played:') // TODO: remove
         console.log(playPile[playPile.length - 1])
         for (let i = 0; i < cpuHand.length; i++) {
-            if (cpuHand[i].color === playPile[playPile.length - 1].color || cpuHand[i].value === playPile[playPile.length - 1].value || cpuHand[i].color === 'any') {
+            if (cpuHand[i].color === playPile[playPile.length - 1].color || cpuHand[i].value === playPile[playPile.length - 1].value || cpuHand[i].color === 'any' || playPile[playPile.length - 1].color === 'any') {
                 let validCard = cpuHand.splice(i, 1)
                 playableCards.push(validCard[0])
             }
@@ -665,7 +665,7 @@ const cpuTurn = () => {
             else {
                 // else cpuTurn() again
                 console.log('cpu goes again') // TODO: remove
-                setTimeout(cpuTurn, cpuDelay)
+                setTimeout(playCPU, cpuDelay)
             }
         }
     }
@@ -727,7 +727,7 @@ const startGame = () => {
     // set event listeners on playerHandDom and drawPileDom
     // playerHandDom
     playerHandDom.addEventListener('click', (event) => {
-        if (playerTurn && event.target.getAttribute('id')) {
+        if (playerTurn && !colorPickerIsOpen && event.target.getAttribute('id')) {
 
             const lastCardDom = playPileDom.childNodes[0]
             lastCardDom.style.border = 'none'
@@ -787,10 +787,10 @@ const startGame = () => {
     let areYouSure = false
 
     drawPileDom.addEventListener('click', () => {
-        if (playerTurn) {
+        if (playerTurn && !colorPickerIsOpen) {
             drawCard(playerHand)
             playerTurn = false;
-            setTimeout(cpuTurn, cpuDelay)
+            setTimeout(playCPU, cpuDelay)
         }
     })
 }
