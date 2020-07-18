@@ -211,6 +211,7 @@ const updateHand = (handToUpdate) => {
     if (handToUpdate === cpuHand) {
         domToUpdate = cpuHandDom
         cardClass = 'cpu'
+        if (cpuVisible) cpuVisible = false
     }
     else {
         domToUpdate = playerHandDom
@@ -428,6 +429,20 @@ const showCpuCards = () => {
             // turn the cards over
             const cpuCard = document.createElement('img')
             cpuCard.setAttribute('src', cpuHand[i].src)
+            cpuCard.setAttribute('class', 'cpu')
+            cpuHandDom.appendChild(cpuCard)
+        }
+    } 
+}
+
+const hideCpuCards = () => {
+    cpuHandDom.innerHTML = ''
+    if (cpuHand.length > 1) {
+        for (let i = 0; i < cpuHand.length; i++) {
+    
+            // turn the cards over
+            const cpuCard = document.createElement('img')
+            cpuCard.setAttribute('src', 'images/back.png')
             cpuCard.setAttribute('class', 'cpu')
             cpuHandDom.appendChild(cpuCard)
         }
@@ -734,7 +749,7 @@ const hitWithDrawCard = () => {
 }
 //#endregion
 
-function playPlayerCard(index) {
+const playPlayerCard = (index) => {
     let cardToPlay = playerHand.splice(index, 1)
     cardToPlay[0].playedByPlayer = true
     playPile.push(cardToPlay[0])
@@ -825,6 +840,7 @@ const startGame = () => {
     })
 }
 //#endregion
+let cpuVisible = false
 
 const listenForDevMode = () => {
     document.addEventListener('keydown', event => {
@@ -860,6 +876,21 @@ const listenForDevMode = () => {
         if (key === '=') {
             playerScore += 10
             updateScores()
+        }
+
+        if (key === 's') {
+            if (cpuVisible) {
+                hideCpuCards()
+                cpuVisible = false
+            }
+            else {
+                showCpuCards()
+                cpuVisible = true
+            }
+        }
+
+        if (key === 'z') {
+            
         }
     })
 }
