@@ -24,6 +24,7 @@ let playerScore = 0
 
 // variables to control gameplay
 let playerTurn = true
+let gameOn = true
 let cpuDelay = Math.floor((Math.random() * cpuHand.length * 200) + 1500)
 let gameOver = 100
 //#endregion
@@ -165,6 +166,7 @@ const startPlayPile = () => {
 
 const newHand = () => {
     console.log('new hand')
+    gameOn = true
     // clear hands and play pile
     cpuHandDom.innerHTML = ''
     cpuHand.length = 0
@@ -408,7 +410,7 @@ const checkForWinner = () => {
 
 const endRound = (winner) => {
     console.log('round over') // TODO: remove
-    
+    gameOn = false;
     playerTurn = !playerTurn
     
     const endOfroundDom = document.querySelector('.end-of-round')
@@ -429,7 +431,7 @@ const endRound = (winner) => {
 
 const endGame = () => {
     console.log('game over') // TODO: remove
-    
+    gameOn = false;
     const endOfGameDom = document.querySelector('.end-of-game')
     const gameDom = document.querySelector('.game')
 
@@ -444,8 +446,6 @@ const endGame = () => {
         winGameFX.play()
         gameDom.textContent = 'You won the game! Play again?'
     }
-    
-    playerTurn = true
 
     // add event listener to 'play again' button
     document.querySelector('.play-again').addEventListener('click', () => {
@@ -468,7 +468,7 @@ const letCpuDrawCards = () => {
 }
 
 const cpuTurn = () => {   
-    if (!playerTurn) {
+    if (!playerTurn && gameOn) {
         console.log('cpu beginning turn') // TODO: remove        
 
         let chosenCard
@@ -482,13 +482,13 @@ const cpuTurn = () => {
             // draw card
             drawCard(cpuHand)
             // end turn
-            console.log('cpu ending turn') // TODO: remove
+            console.log('CPU ending turn') // TODO: remove
             playerTurn = true
         }
         //if one playable card
         else if (playable.length === 1) {
-            chosenCard = playable
-            playCPUCard(chosenCard[0])
+            // chosenCard = playable[0]
+            playCPUCard(playable[0])
         }
         // if more than one playable cards
         else if (playable.length > 1) {
@@ -502,39 +502,48 @@ const cpuTurn = () => {
     function determinePlayableCards() {
         const playableCards = []
         
-        // check if playPile is wild
-        if (playPile[playPile.length - 1].color === 'any') {
-            // all cards playable
-            console.log('last played card is wild') // TODO: remove
+        // // check if playPile is wild
+        // if (playPile[playPile.length - 1].color === 'any') {
+        //     // all cards playable
+        //     console.log('last played card is wild') // TODO: remove
             
-            // OF array not IN object!
-            for (const card of cpuHand) {
-                playableCards.push(card)
-            }
+        //     // OF array not IN object!
+        //     for (const card of cpuHand) {
+        //         playableCards.push(card)
+        //     }
 
-            cpuHand.length = 0
+        //     cpuHand.length = 0
+        // }
+        // // if not wild, compare cpuHand to top of play pile
+        // else {
+        //     console.log('last card played:') // TODO: remove
+        //     console.log(playPile[playPile.length - 1])
+        //     for (let i = 0; i < cpuHand.length; i++) {
+        //         if (cpuHand[i].color === playPile[playPile.length - 1].color || cpuHand[i].value === playPile[playPile.length - 1].value || cpuHand[i].color === 'any') {
+        //             let validCard = cpuHand.splice(i, 1)
+        //             playableCards.push(validCard[0])
+        //         }
+        //     }
+        //     console.log('playable cards:')
+        //     console.log(playableCards) // TODO: remove
+        // }
 
-            console.log('playable cards')
-            console.log(playableCards) // TODO: remove
-        }
-        // if not wild, compare cpuHand to top of play pile
-        else {
-            console.log('last card played:') // TODO: remove
-            console.log(playPile[playPile.length - 1])
-            for (let i = 0; i < cpuHand.length; i++) {
-                if (cpuHand[i].color === playPile[playPile.length - 1].color || cpuHand[i].value === playPile[playPile.length - 1].value || cpuHand[i].color === 'any') {
-                    let validCard = cpuHand.splice(i, 1)
-                    playableCards.push(validCard[0])
-                }
+        console.log('last card played:') // TODO: remove
+        console.log(playPile[playPile.length - 1])
+        for (let i = 0; i < cpuHand.length; i++) {
+            if (cpuHand[i].color === playPile[playPile.length - 1].color || cpuHand[i].value === playPile[playPile.length - 1].value || cpuHand[i].color === 'any') {
+                let validCard = cpuHand.splice(i, 1)
+                playableCards.push(validCard[0])
             }
-            console.log('playable cards:')
-            console.log(playableCards) // TODO: remove
         }
+        console.log('playable cards:')
+        console.log(playableCards) // TODO: remove
+        
         return playableCards
 }
     
     function runStrategist(playable) {
-        let highCardIndex, lowCardIndex
+        let cardIndex
             
         // run strategist to determine strategy
         let strategist = Math.random()
@@ -542,61 +551,57 @@ const cpuTurn = () => {
         // if strategist > 0.5 || playerHand <= 3
         if (strategist > 0.7 || playerHand.length < 3 || cpuHand.length > (playerHand.length * 2)) {
             // prioritize action/high point cards
+            console.log('cpu chose high card') // TODO: remove
             let highestValue = 0
 
             for (let i = 0; i < playable.length; i++){
                 if (playable[i].value > highestValue) {
                     highestValue = playable[i].value
-                    highCardIndex = i
+                    cardIndex = i
                 }
             }
 
             // play card determined by strategist
             // remove card from playable
-            chosenCard = playable.splice(highCardIndex, 1)
+            chosenCard = playable.splice(cardIndex, 1)
 
             // return playable to cpuHand
-            if (playable.length > 0) {
-                for (const card of playable) {
-                    cpuHand.push(card)
-                }
-            }
-
-            console.log('cpu chose high card') // TODO: remove
-            console.log(chosenCard[0])  // TODO: remove
-
-            return chosenCard[0]   
+            returnPlayablesToHand()
         }
-
         else {
             // else prioritize color || number cards
+            console.log('cpu chose low card') // TODO: remove
             let lowestValue = 14
 
             for (let i = 0; i < playable.length; i++){
                 if (playable[i].value < lowestValue) {
                     lowestValue = playable[i].value
-                    lowCardIndex = i
+                    cardIndex = i
                 }
             }
 
             // play card determined by strategist
             // remove card from playable
-            chosenCard = playable.splice(lowCardIndex, 1)
+            chosenCard = playable.splice(cardIndex, 1)
 
-            // return playable to cpuHand
+            returnPlayablesToHand()
+
+            
+        }
+
+        console.log(chosenCard[0])  // TODO: remove
+        return chosenCard[0]
+
+        function returnPlayablesToHand() {
             if (playable.length > 0) {
                 for (const card of playable) {
                     cpuHand.push(card)
                 }
             }
-
-            console.log('cpu chose low card') // TODO: remove
-            return chosenCard[0]   
         }
     }
 
     function playCPUCard(chosenCard) {
-        // make topOfPlayPile removed card
         console.log('playing card:') // TODO: remove
         console.log(chosenCard)
         
