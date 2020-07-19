@@ -558,8 +558,10 @@ const playCPU = () => {
             // draw card
             drawCard(cpuHand)
             // end turn
-            console.log('CPU ending turn') // TODO: remove
-            playerTurn = true
+            setTimeout(() => {
+                console.log('CPU ending turn') // TODO: remove
+                playerTurn = true
+            }, 500)
         }
         //if one playable card
         else if (playable.length === 1) {
@@ -577,32 +579,6 @@ const playCPU = () => {
 //#region CPU SPECIFIC FUNCTIONS
     function determinePlayableCards() {
         const playableCards = []
-        
-        // // check if playPile is wild
-        // if (playPile[playPile.length - 1].color === 'any') {
-        //     // all cards playable
-        //     console.log('last played card is wild') // TODO: remove
-            
-        //     // OF array not IN object!
-        //     for (const card of cpuHand) {
-        //         playableCards.push(card)
-        //     }
-
-        //     cpuHand.length = 0
-        // }
-        // // if not wild, compare cpuHand to top of play pile
-        // else {
-        //     console.log('last card played:') // TODO: remove
-        //     console.log(playPile[playPile.length - 1])
-        //     for (let i = 0; i < cpuHand.length; i++) {
-        //         if (cpuHand[i].color === playPile[playPile.length - 1].color || cpuHand[i].value === playPile[playPile.length - 1].value || cpuHand[i].color === 'any') {
-        //             let validCard = cpuHand.splice(i, 1)
-        //             playableCards.push(validCard[0])
-        //         }
-        //     }
-        //     console.log('playable cards:')
-        //     console.log(playableCards) // TODO: remove
-        // }
 
         console.log('last card played:') // TODO: remove
         console.log(playPile[playPile.length - 1])
@@ -625,24 +601,26 @@ const playCPU = () => {
         let strategist = Math.random()
         console.log('strategist:', strategist) // TODO: remove
         // if strategist > 0.5 || playerHand <= 3
-        if (strategist > 0.7 || playerHand.length < 3 || cpuHand.length > (playerHand.length * 2) || (playPile[playPile.length - 1].playedByPlayer === true && playPile[playPile.length - 1].drawValue > 0) || (playPile[playPile.length - 2].playedByPlayer === true && playPile[playPile.length - 1].drawValue > 0)) {
-            // prioritize action/high point cards
-            console.log('cpu chose high card') // TODO: remove
-            let highestValue = 0
-
-            for (let i = 0; i < playable.length; i++){
-                if (playable[i].value > highestValue) {
-                    highestValue = playable[i].value
-                    cardIndex = i
+        if (playPile.length >= 2) {
+            if (strategist > 0.7 || playerHand.length < 3 || cpuHand.length > (playerHand.length * 2) || (playPile[playPile.length - 1].playedByPlayer === true && playPile[playPile.length - 1].drawValue > 0) || (playPile[playPile.length - 2].playedByPlayer === true && playPile[playPile.length - 1].drawValue > 0)) {
+                // prioritize action/high point cards
+                console.log('cpu chose high card') // TODO: remove
+                let highestValue = 0
+    
+                for (let i = 0; i < playable.length; i++){
+                    if (playable[i].value > highestValue) {
+                        highestValue = playable[i].value
+                        cardIndex = i
+                    }
                 }
-            }
-
-            // play card determined by strategist
-            // remove card from playable
-            chosenCard = playable.splice(cardIndex, 1)
-
-            // return playable to cpuHand
-            returnPlayablesToHand()
+    
+                // play card determined by strategist
+                // remove card from playable
+                chosenCard = playable.splice(cardIndex, 1)
+    
+                // return playable to cpuHand
+                returnPlayablesToHand()
+        }
         }
         else {
             // else prioritize color || number cards
@@ -726,7 +704,8 @@ const playCPU = () => {
                     checkChangeTurn()
                 },1000)
             }
-            else checkChangeTurn()
+            // else checkChangeTurn()
+            else setTimeout(checkChangeTurn, 500)
         }, 300)
         
 
