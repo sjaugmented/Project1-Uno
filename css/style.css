@@ -272,6 +272,7 @@ button:hover {
     body {
         margin-top: -50px;
         margin-bottom: 0px;
+        font-family: 'Avenir Next';
     }
 
     .cpu-box {
@@ -283,7 +284,12 @@ button:hover {
     }
 
     .play-pile img {
+        width: 100px;
+    }
+
+    .draw-pile img {
         width: 70px;
+        margin-top: 20px;
     }
 
     .score {
@@ -295,7 +301,7 @@ button:hover {
     }
     
     img {
-        width: 70px;
+        width: 60px;
         margin-left: 0px;
     }
 
@@ -312,15 +318,19 @@ button:hover {
     }
 
     .player-draw {
-        transform: translateY(140px) translateX(-100px);
+        transform: translateY(170px) translateX(-100px);
     }
 
     .cpu-draw {
-        transform: translateY(-140px) translateX(-100px);
+        transform: translateY(-170px) translateX(-100px);
     }
 
     .color-picker {
-        margin-top: 5px;
+        margin-top: 0px;
+    }
+
+    .color-picker p {
+        font-size: medium;
     }
 
     .color-picker button {

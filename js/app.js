@@ -785,9 +785,10 @@ const startGame = () => {
         if (playerTurn && !colorPickerIsOpen && event.target.getAttribute('id')) {
 
             const lastCardDom = playPileDom.childNodes[0]
-            if (lastCardDom.style)
-            lastCardDom.style.border = 'none'
-            lastCardDom.style.width = '100px'
+            if (lastCardDom.style !== '100px') {
+                lastCardDom.style.width = '100px'
+                lastCardDom.style.border = 'none'
+            }
 
             // use target's ID to find card object in array
             let index = parseInt(event.target.getAttribute('id'))
