@@ -785,6 +785,7 @@ const startGame = () => {
         if (playerTurn && !colorPickerIsOpen && event.target.getAttribute('id')) {
 
             const lastCardDom = playPileDom.childNodes[0]
+            if (lastCardDom.style)
             lastCardDom.style.border = 'none'
             lastCardDom.style.width = '100px'
 

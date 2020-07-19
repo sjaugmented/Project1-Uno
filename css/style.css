@@ -267,27 +267,31 @@ button:hover {
     border-radius: 0px;
     box-shadow: none;
 }
-/* for landscape iphone X */
-@media only screen and (max-width: 812) {
+
+@media (max-width: 812px) {
     body {
         margin-top: -50px;
         margin-bottom: 0px;
     }
 
-    .cpu-hand {
-        margin-bottom: 30px;
+    .cpu-box {
+        margin-bottom: 10px;
     }
 
     .play-area {
 
     }
 
+    .play-pile img {
+        width: 70px;
+    }
+
     .score {
         font-size: large;
     }
 
-    .player-hand {
-        margin-top: 30px;
+    .player-box {
+        margin-top: 10px;
     }
     
     img {
@@ -306,48 +310,21 @@ button:hover {
     .shout img {
         transform: scale(2);
     }
-    
-}
 
-@media only screen and (max-width: 380) {
-    body {
-        margin-top: 50px;
-        margin-bottom: 0px;
+    .player-draw {
+        transform: translateY(140px) translateX(-100px);
     }
 
-    .cpu-hand {
-        margin-bottom: 30px;
+    .cpu-draw {
+        transform: translateY(-140px) translateX(-100px);
     }
 
-    .play-area {
-        margin-left: -20px;
+    .color-picker {
+        margin-top: 5px;
     }
 
-    .score {
-        font-size: xx-small;
-        margin-left: -10px;
-        margin-right: 50px;
-    }
-
-    .player-hand {
-        margin-top: 30px;
-    }
-    
-    img {
-        width: 50px;
-        margin-left: 5px;
-    }
-
-    .play-card {
-        transform: translateY(-130px);
-    }
-
-    .cpu-play-card {
-        transform: translateY(130px);
-    }
-
-    .shout img {
-        transform: scale(2);
+    .color-picker button {
+        height: 20px;
     }
     
 }
