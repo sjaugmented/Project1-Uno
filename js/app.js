@@ -625,7 +625,7 @@ const playCPU = () => {
         let strategist = Math.random()
         console.log('strategist:', strategist) // TODO: remove
         // if strategist > 0.5 || playerHand <= 3
-        if (strategist > 0.7 || playerHand.length < 3 || cpuHand.length > (playerHand.length * 2)) {
+        if (strategist > 0.7 || playerHand.length < 3 || cpuHand.length > (playerHand.length * 2) || (playPile[playPile.length - 1].playedByPlayer === true && playPile[playPile.length - 1].drawValue > 0)) {
             // prioritize action/high point cards
             console.log('cpu chose high card') // TODO: remove
             let highestValue = 0
