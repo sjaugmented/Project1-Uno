@@ -47,6 +47,11 @@ const preLoadImgs = () => {
             imgPreLoad.push(img)
         }
     }
+
+    for (let i = 0; i < imgPreLoad.length; i++) {
+        playPileDom.appendChild(imgPreLoad[i])
+        playPileDom.innerHTML = ''
+    }
 }
 //#endregion
 
