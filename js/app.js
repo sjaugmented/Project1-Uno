@@ -606,27 +606,25 @@ const playCPU = () => {
         let strategist = Math.random()
         console.log('strategist:', strategist) // TODO: remove
         // if strategist > 0.5 || playerHand <= 3
-        if (playPile.length >= 2) {
-            if (strategist > 0.7 || playerHand.length < 3 || cpuHand.length > (playerHand.length * 2) || (playPile[playPile.length - 1].playedByPlayer === true && playPile[playPile.length - 1].drawValue > 0) || (playPile[playPile.length - 2].playedByPlayer === true && playPile[playPile.length - 1].drawValue > 0)) {
-                // prioritize action/high point cards
-                console.log('cpu chose high card') // TODO: remove
-                let highestValue = 0
-    
-                for (let i = 0; i < playable.length; i++){
-                    if (playable[i].value > highestValue) {
-                        highestValue = playable[i].value
-                        cardIndex = i
-                    }
+        if (playPile.length > 2 && (strategist > 0.7 || playerHand.length < 3 || cpuHand.length > (playerHand.length * 2) || (playPile[playPile.length - 1].playedByPlayer === true && playPile[playPile.length - 1].drawValue > 0) || (playPile[playPile.length - 2].playedByPlayer === true && playPile[playPile.length - 1].drawValue > 0))) {
+            // prioritize action/high point cards
+            console.log('cpu chose high card') // TODO: remove
+            let highestValue = 0
+
+            for (let i = 0; i < playable.length; i++){
+                if (playable[i].value > highestValue) {
+                    highestValue = playable[i].value
+                    cardIndex = i
                 }
-    
-                // play card determined by strategist
-                // remove card from playable
-                chosenCard = playable.splice(cardIndex, 1)
-    
-                // return playable to cpuHand
-                returnPlayablesToHand()
-        }
-        }
+            }
+
+            // play card determined by strategist
+            // remove card from playable
+            chosenCard = playable.splice(cardIndex, 1)
+
+            // return playable to cpuHand
+            returnPlayablesToHand()
+    }
         else {
             // else prioritize color || number cards
             console.log('cpu chose low card') // TODO: remove
