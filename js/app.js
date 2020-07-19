@@ -30,6 +30,26 @@ let cpuDelay = Math.floor((Math.random() * cpuHand.length * 200) + 1500)
 let gameOver = 100
 //#endregion
 
+//#region preload imgs for faster loading
+const imgPreLoad = []
+let preLoaded = false
+
+const preLoadImgs = () => {
+    for (let i = 0; i <= 3; i++) {
+        let color
+        if (i === 0) color = 'red'
+        if (i === 1) color = 'green'
+        if (i === 2) color = 'blue'
+        if (i === 3) color = 'yellow'
+        for (let n = 0; n <= 14; n++) {
+            let img = new Image()
+            img.src = 'images/' + color + i + '.png'
+            imgPreLoad.push(img)
+        }
+    }
+}
+//#endregion
+
 // #region AUDIO
 const shuffleFX = new Audio('audio/shuffle.wav')
 const playCardFX = new Audio('audio/playCardNew.wav')
@@ -432,8 +452,8 @@ const checkForWinner = () => {
 }
 
 const showCpuCards = () => {
-    cpuHandDom.innerHTML = ''
-    if (cpuHand.length > 1) {
+    if (cpuHand.length >= 1) {
+        cpuHandDom.innerHTML = ''
         for (let i = 0; i < cpuHand.length; i++) {
     
             // turn the cards over
@@ -446,8 +466,8 @@ const showCpuCards = () => {
 }
 
 const hideCpuCards = () => {
-    cpuHandDom.innerHTML = ''
-    if (cpuHand.length > 1) {
+    if (cpuHand.length >= 1) {
+        cpuHandDom.innerHTML = ''
         for (let i = 0; i < cpuHand.length; i++) {
     
             // turn the cards over
@@ -464,7 +484,7 @@ const endRound = (winner) => {
     gameOn = false;
     playerTurn = !playerTurn
 
-    showCpuCards()
+    if (cpuHand.length > 0) showCpuCards()
     
     const endOfroundDom = document.querySelector('.end-of-round')
     const roundDom = document.querySelector('.round')
@@ -488,7 +508,8 @@ const endRound = (winner) => {
 const endGame = () => {
     console.log('game over') // TODO: remove
     gameOn = false;
-    showCpuCards()
+    if (cpuHand.length > 0) showCpuCards()
+
     const endOfGameDom = document.querySelector('.end-of-game')
     const gameDom = document.querySelector('.game')
 
@@ -672,19 +693,17 @@ const playCPU = () => {
             updatePlayPileDom()
 
             // check if cpu played wild
-            if (playPile[playPile.length - 1].color === 'any' && playPile[playPile.length - 1].drawValue === 0) {
+            if (playPile[playPile.length - 1].color === 'any' && playPile[playPile.length - 1].drawValue === 0 && playPile[playPile.length - 1].playedByPlayer === false) {
                 console.log('cpu played a wild') // TODO: remove
                 chooseColorAfterWild()
             }
 
             // check cpuHand length and update cpuHandDom
-            if (cpuHand.length > 1) {
+            if (cpuHand.length >= 1) {
                 updateHand(cpuHand)
-            }
-            // determine uno
-            else if (cpuHand.length === 1) {
-                updateHand(cpuHand)
-                showUno(cpuUno)
+                if (cpuHand.length === 1) {
+                    showUno(cpuUno)
+                }
             }
             // if end of round
             else {
@@ -708,7 +727,7 @@ const playCPU = () => {
                 },1000)
             }
             else checkChangeTurn()
-        }, 200)
+        }, 300)
         
 
         function checkChangeTurn() {
@@ -770,6 +789,11 @@ const playPlayerCard = (index) => {
 
 //#region ///////MAIN GAME FUNCTION////////
 const startGame = () => {
+    if (!preLoaded) {
+        preLoadImgs()
+        preLoaded = true
+    } 
+
     playerScore = 0
     cpuScore = 0
 
@@ -871,6 +895,11 @@ const listenForDevMode = () => {
         if (key === 'x') {
             playerHand.pop()
             updateHand(playerHand)
+        }
+
+        if (key === 'z') {
+            cpuHand.pop()
+            updateHand(cpuHand)
         }
 
         if (key === 'w') {
