@@ -270,10 +270,9 @@ const updateHand = (handToUpdate) => {
     // keep dom element from collapsing when hand is empty
     if (handToUpdate.length === 0) {
         const updatedCard = document.createElement('img')
-        updatedCard.setAttribute('src', '')
+        updatedCard.setAttribute('src', 'images/empty.png')
         updatedCard.setAttribute('class', cardClass)
         // update ID's to match playerHand indexes
-        updatedCard.setAttribute('id', i)
         domToUpdate.appendChild(updatedCard)
     }
 }
