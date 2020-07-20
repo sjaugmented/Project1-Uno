@@ -123,5 +123,7 @@ The only issue left that's bugging (pun intended) me is that every once and a wh
 ## TECHNOLOGIES
 
 HTML
+
 CSS
+
 JavaScript
