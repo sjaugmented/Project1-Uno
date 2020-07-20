@@ -540,7 +540,11 @@ const endGame = () => {
         playAgain.play()
         // hide end of game element on click
         endOfGameDom.classList.add('hidden')
-        startGame()
+        playerScore = 0
+        cpuScore = 0
+        updateScores()
+        newHand()
+        if (!playerTurn) setTimeout(playCPU, cpuDelay)
     })
 }
 //#endregion
