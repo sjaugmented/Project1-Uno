@@ -119,3 +119,9 @@ Also very happy with the admittedly basic CSS styling and animations I was able 
 I wish I'd had more time to refactor and pair down my code. I did the best I could, but I built a bit of a labryrinth. Because of the different ways the CPU and player logic were structured and how hands are kept track of and linked to the DOM, it was a little difficult to create functions that worked for both players. I did the best I could to follow the DRY principle, but at just over 900 lines of code, I could have done better.
 
 The only issue left that's bugging (pun intended) me is that every once and a while, after the user plays a wild card and picks a new color, the CPU has a tendency to play multiple cards all at once. It's not cheating - when you check the console logs, it's usually playing a skip or reverse card, followed by a number card, but it all happens at once and looks like the CPU is laying down 2-3 cards in one turn. I suspect this is an issue with how I've structured the setTimeouts, but I can't pin down exactly where in the code the bug is being generated.
+
+## TECHNOLOGIES
+
+HTML
+CSS
+JavaScript
