@@ -381,6 +381,7 @@ const chooseColor = (rgb) => {
 
     // hide the color picker
     hideColorPicker()
+    playerTurn = false;
     setTimeout(playCPU, cpuDelay)}
 
 function hideColorPicker() {
