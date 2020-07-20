@@ -218,6 +218,8 @@ const newHand = () => {
     dealCards()
     // set down first play card that isn't an action card
     startPlayPile()
+
+    if (colorPickerIsOpen) hideColorPicker()
 }
 
 const updatePlayPileDom = () => {
@@ -379,10 +381,14 @@ const chooseColor = (rgb) => {
     playPile[playPile.length - 1].color = rgb
 
     // hide the color picker
+    hideColorPicker()
+    skipOrEndTurn()
+}
+
+function hideColorPicker() {
     const colorPicker = document.querySelector('.color-picker')
     colorPicker.style.opacity = 0
     colorPickerIsOpen = false
-    skipOrEndTurn()
 }
 
 const skipOrEndTurn = () => {
@@ -444,7 +450,7 @@ const checkForWinner = () => {
             winRoundFX.play()
             endRound(playerHand)
         }
-        else {
+        if (cpuHand.length === 0) {
             loseFX.play()
             endRound(cpuHand)
         }
@@ -571,14 +577,19 @@ const playCPU = () => {
         //if one playable card
         else if (playable.length === 1) {
             // chosenCard = playable[0]
-            playCPUCard(playable[0])
+            setTimeout(playCPUCard, 300, playable[0])
+            
+            //playCPUCard(playable[0])
         }
         // if more than one playable cards
         else if (playable.length > 1) {
             console.log('cpu has', playable.length, 'playable cards')
             
             let chosenCard = runStrategist(playable)
-            playCPUCard(chosenCard)            
+            setTimeout(playCPUCard, 300, chosenCard)
+            
+
+            //playCPUCard(chosenCard)
         }
     }
 //#region CPU SPECIFIC FUNCTIONS
@@ -641,9 +652,7 @@ const playCPU = () => {
             // remove card from playable
             chosenCard = playable.splice(cardIndex, 1)
 
-            returnPlayablesToHand()
-
-            
+            returnPlayablesToHand()           
         }
 
         console.log(chosenCard[0])  // TODO: remove
@@ -667,6 +676,7 @@ const playCPU = () => {
         cpuDomCards[Math.floor(Math.random() * cpuDomCards.length)].classList.add('cpu-play-card')
         console.log('animating CPU card')
         pickPlayCardSound()
+        // debugger
         
         setTimeout(() => {
             playPile.push(chosenCard)
@@ -688,11 +698,15 @@ const playCPU = () => {
             }
             // if end of round
             else {
-                // tally points & update scores
-                tallyPoints(playerHand)
-                updateScores()
-
-                checkForWinner()
+                // tallyPoints(playerHand)
+                // updateScores()
+                // checkForWinner()
+                updateHand(cpuHand)
+                setTimeout(() => {
+                    tallyPoints(playerHand)
+                    updateScores()
+                    checkForWinner()
+                }, 1200)
             }
 
             // if cpu played a draw card
@@ -709,7 +723,7 @@ const playCPU = () => {
             }
             // else checkChangeTurn()
             else setTimeout(checkChangeTurn, 500)
-        }, 300)
+        }, 500)
         
 
         function checkChangeTurn() {
@@ -784,6 +798,8 @@ const startGame = () => {
     newHand()
     updateScores()
 
+    if (!playerTurn) setInterval(playCPU, cpuDelay)
+
 
     // set event listeners on playerHandDom and drawPileDom
     // playerHandDom
@@ -817,24 +833,22 @@ const startGame = () => {
                     letCpuDrawCards()
                     
                     // check playerHand length and update DOM
-                    if (playerHand.length > 1) {
+                    if (playerHand.length >= 1) {
                         updateHand(playerHand)
-                    }
-                    else if (playerHand.length === 1) {
-                        updateHand(playerHand)
-                        showUno(playerUno)
+                        if (playerHand.length === 1) showUno(playerUno)
+
                     }
                     else {
-                        // tally points
-                        tallyPoints(cpuHand)
-                        updateScores()
-
-                        // next hand if both scores < gameOver
-                        checkForWinner()
+                        updateHand(playerHand)
+                        setTimeout(() => {
+                            tallyPoints(cpuHand)
+                            updateScores()
+                            checkForWinner()
+                        }, 1200)
                     }
 
                     //check if wild
-                    if (playPile[playPile.length - 1].color === 'any' && playPile[playPile.length - 1].drawValue === 0) {
+                    if (playPile[playPile.length - 1].color === 'any' && playPile[playPile.length - 1].drawValue === 0 && playPile[playPile.length - 1].playedByPlayer) {
                         // set new color
                         showColorPicker()
                         return
@@ -852,8 +866,12 @@ const startGame = () => {
     drawPileDom.addEventListener('click', () => {
         if (playerTurn && !colorPickerIsOpen) {
             drawCard(playerHand)
-            playerTurn = false;
-            setTimeout(playCPU, cpuDelay)
+            // playerTurn = false;
+            // setTimeout(playCPU, cpuDelay)
+            setTimeout(() => {
+                playerTurn = false;
+                setTimeout(playCPU, cpuDelay)
+            }, 500)
         }
     })
 }
