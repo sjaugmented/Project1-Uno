@@ -103,3 +103,13 @@ These messages and the Game Over screen will be the only on screen prompts in an
 (In an effort to protect against unintended clicks, there might be an "Are you sure?" message if the player clicks the Draw Pile while holding playable cards.)
 
 The goal is to create an aesthetically pleasing, minimal-yet-satisfying game loop that is relaxing and entertaining and that - hopefully - users will want to play again and again.
+
+## CHALLENGES & UNCONQUERED LANDS
+
+Overall I'm very happy with Project 1. The biggest challenge was for the CPU to feel as human as possible, complete with delays for decision making and a varying strategy of when to play what cards. The cpu even has a drive for revenge, remembering if and when the player hit it with a draw card, and responding in kind if it has draw cards of its own.
+
+Also very happy with the admittedly basic CSS styling and animations I was able to achieve and how it's optimized (kind of) for mobile.
+
+I wish I'd had more time to refactor and pair down my code. I did the best I could, but I built a bit of a labryrinth. The cpu and player have different methods for checking and playing viable cards so it was a little difficult to create functions that work for both players. It did the best I could to follow the DRY principle, but at just over 900 lines of code, I could have done better.
+
+The only issue left that's bugging (pun intended) me is that every once and a while, after the user plays a wild card and picks a new color, the cpu has a tendency to play multiple cards all at once. It's not cheating - when you check the console logs, it's usually playing a skip or reverse card, followed by a number card, but it all happens at once and looks like the cpu is laying down 2-3 cards in one turn. I suspect this is an issue with how I've structured the setTimeouts, but I can't pin down exactly where in the code the bug is being generated.
