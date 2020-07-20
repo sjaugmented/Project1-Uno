@@ -271,7 +271,7 @@ const updateHand = (handToUpdate) => {
     if (handToUpdate.length === 0) {
         const updatedCard = document.createElement('img')
         updatedCard.setAttribute('src', 'images/empty.png')
-        updatedCard.setAttribute('class', cardClass)
+        updatedCard.setAttribute('class', 'empty')
         // update ID's to match playerHand indexes
         domToUpdate.appendChild(updatedCard)
     }

@@ -71,8 +71,7 @@ img {
     width: 100px;
     margin-left: -28px;
     border-radius: 10px;
-    /* background: #00628d; */
-    box-shadow:  -7px -7px 14px #00405c
+    box-shadow:  -7px -7px 14px #00405c;
 }
 
 .player-hand img:hover {
@@ -266,6 +265,13 @@ button:hover {
 .cpu-uno img {
     border-radius: 0px;
     box-shadow: none;
+}
+
+.empty {
+    width: 100px;
+    margin-left: -28px;
+    border-radius: 10px;
+    box-shadow:  none;
 }
 
 @media (max-width: 812px) {
