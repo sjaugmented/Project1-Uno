@@ -1,5 +1,6 @@
 # Project1-Uno
 SEI-629 Project 1 - HTML, CSS, JS
+Seth Johnson
 <br>
 <img src="uno-mockup.png">
 <br>
