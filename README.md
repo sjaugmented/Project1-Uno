@@ -25,7 +25,7 @@ Reverse, Skip, +2 = 20pts
 <br>
 Wild, Wild +4 = 50pts
 
-The first player to reach 200 loses the game.
+The first player to reach 100 loses the game.
 
 
 ## Cards will be deployed as objects.
