@@ -381,8 +381,7 @@ const chooseColor = (rgb) => {
 
     // hide the color picker
     hideColorPicker()
-    skipOrEndTurn()
-}
+    setTimeout(playCPU, cpuDelay)}
 
 function hideColorPicker() {
     const colorPicker = document.querySelector('.color-picker')
@@ -571,6 +570,7 @@ const playCPU = () => {
             setTimeout(() => {
                 console.log('CPU ending turn') // TODO: remove
                 playerTurn = true
+                return
             }, 500)
         }
         //if one playable card
@@ -730,6 +730,7 @@ const playCPU = () => {
                 // if changeTurn, playerTurn = true
                 console.log('cpu has finished its turn') // TODO: remove
                 playerTurn = true
+                return
             }
             else {
                 // else cpuTurn() again
@@ -797,7 +798,7 @@ const startGame = () => {
     newHand()
     updateScores()
 
-    if (!playerTurn) setInterval(playCPU, cpuDelay)
+    if (!playerTurn) setTimeout(playCPU, cpuDelay)
 
 
     // set event listeners on playerHandDom and drawPileDom
@@ -835,7 +836,6 @@ const startGame = () => {
                     if (playerHand.length >= 1) {
                         updateHand(playerHand)
                         if (playerHand.length === 1) showUno(playerUno)
-
                     }
                     else {
                         updateHand(playerHand)
@@ -927,10 +927,6 @@ const listenForDevMode = () => {
                 showCpuCards()
                 cpuVisible = true
             }
-        }
-
-        if (key === 'z') {
-            
         }
     })
 }
