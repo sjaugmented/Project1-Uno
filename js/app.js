@@ -507,10 +507,9 @@ const endRound = (winner) => {
     // hide end of round element after 2 seconds
     setTimeout(() => {
         endOfroundDom.classList.add('hidden')
+        playerTurn = !playerTurn
         newHand()
-        setTimeout(() => {
-            if (!playerTurn) playCPU()
-        }, cpuDelay)
+        if (!playerTurn) setTimeout(playCPU, cpuDelay)
         
     }, 3000)
 }
@@ -543,6 +542,7 @@ const endGame = () => {
         playerScore = 0
         cpuScore = 0
         updateScores()
+        playerTurn = !playerTurn
         newHand()
         if (!playerTurn) setTimeout(playCPU, cpuDelay)
     })
